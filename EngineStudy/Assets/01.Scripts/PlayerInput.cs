@@ -5,10 +5,16 @@ using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
+
+
     public string moveAxisName = "Horizontal";
     public string rotateAxisName = "Vertical";
+    public string fireName = "Fire1";
+    public string reloadName = "Reload";
 
     public Vector2 moveInput { get; private set; }
+    public bool Fire => Input.GetButtonDown(fireName);
+    public bool Reload => Input.GetKeyDown(reloadName);
    
 
     // Start is called before the first frame update
@@ -34,5 +40,7 @@ public class PlayerInput : MonoBehaviour
         {
             moveInput.Normalize();
         }
+
+        
     }
 }

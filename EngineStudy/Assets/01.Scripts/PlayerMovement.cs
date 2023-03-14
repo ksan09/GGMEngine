@@ -29,13 +29,14 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate() 
     {
         Move(playerInput.moveInput);
+        Rotate();
     }
 
 
     // Update is called once per frame
     void Update()
     {
-     
+        UpdateAnimation(playerInput.moveInput);
     }
 
     public void Move(Vector2 moveInput)
@@ -50,13 +51,16 @@ public class PlayerMovement : MonoBehaviour
 
     public void Rotate()
     {
-        var targetRotation = followCam.transform.eulerAngles;
-        //transform.eulerAngles = Vector3.up * targetRotation;
+        if (currentSpeed <= 0) return;
+
+        var targetRotation = followCam.transform.eulerAngles.y;
+        transform.eulerAngles = Vector3.up * targetRotation;
     }
 
      private void UpdateAnimation(Vector2 moveInput)
     {
-        
+        animator.SetFloat("Vertical Move", moveInput.y);
+        animator.SetFloat("Horizontal Move", moveInput.x);
     }
 
 }
