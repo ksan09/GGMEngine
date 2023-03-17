@@ -14,7 +14,7 @@ public class PlayerInput : MonoBehaviour
 
     public Vector2 moveInput { get; private set; }
     public bool Fire => Input.GetButtonDown(fireName);
-    public bool Reload => Input.GetKeyDown(reloadName);
+    public bool Reload => Input.GetButtonDown(reloadName);
    
 
     // Start is called before the first frame update
