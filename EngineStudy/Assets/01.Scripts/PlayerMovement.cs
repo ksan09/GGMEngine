@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private CharacterController characterController; 
-    private PlayerInput playerInput; 
+    private PlayerInput1 playerInput; 
     private Animator animator; 
 
     private Camera followCam; 
@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //컴포넌트 가져오기
         characterController = GetComponent<CharacterController>();
-        playerInput = GetComponent<PlayerInput>();
+        playerInput = GetComponent<PlayerInput1>();
         animator = GetComponent<Animator>();
         followCam = Camera.main;
     }

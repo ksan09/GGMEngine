@@ -5,11 +5,11 @@ using UnityEngine;
 public class PlayerShooter : MonoBehaviour
 {
     public Gun gun;
-    private PlayerInput playerInput;
+    private PlayerInput1 playerInput;
 
     private void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
+        playerInput = GetComponent<PlayerInput1>();
     }
 
 
