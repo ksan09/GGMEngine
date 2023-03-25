@@ -16,11 +16,13 @@ public class PlayerInput : MonoBehaviour
     public bool Fire => Input.GetButtonDown(fireName);
     public bool Reload => Input.GetButtonDown(reloadName);
    
+    private Camera mainCam;
+    public Action OnFirePressed;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        mainCam = Camera.main;
     }
 
     // Update is called once per frame
@@ -37,10 +39,29 @@ public class PlayerInput : MonoBehaviour
         moveInput = new Vector2(x, y);
 
         if(moveInput.sqrMagnitude > 1)
-        {
             moveInput.Normalize();
+
+        if(Fire)
+        {
+            OnFirePressed?.Invoke();
+        }
+    }
+
+    public bool GetMouseWorldPosition(out Vector3 point)
+    {
+        Ray cameraRay = mainCam.ScreenPointToRay(Input.mousePosition);
+
+        RaycastHit hit;
+        float depth = mainCam.farClipPlane;
+
+        point = Vector3.zero;
+
+        if (Physics.Raycast(cameraRay, out hit, depth))
+        {
+            point = hit.point;
+            return true;
         }
 
-        
+        return false;
     }
 }

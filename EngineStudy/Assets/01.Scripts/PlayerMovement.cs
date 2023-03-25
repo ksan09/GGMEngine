@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private CharacterController characterController; 
-    private PlayerInput1 playerInput; 
+    private PlayerInput playerInput; 
     private Animator animator; 
 
     private Camera followCam; 
@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
     {
         //컴포넌트 가져오기
         characterController = GetComponent<CharacterController>();
-        playerInput = GetComponent<PlayerInput1>();
+        playerInput = GetComponent<PlayerInput>();
         animator = GetComponent<Animator>();
         followCam = Camera.main;
     }
@@ -55,6 +55,20 @@ public class PlayerMovement : MonoBehaviour
 
         var targetRotation = followCam.transform.eulerAngles.y;
         transform.eulerAngles = Vector3.up * targetRotation;
+    }
+
+    public void SetRotation()
+    {
+        Vector3 target = Vector3.zero;
+
+        bool isHit = playerInput.GetMouseWorldPosition(out target);
+
+        if(isHit)
+        {
+            Vector3 dir = target - transform.position;
+            dir.y = 0;
+            transform.rotation = Quaternion.LookRotation(dir.normalized);
+        }
     }
 
      private void UpdateAnimation(Vector2 moveInput)
