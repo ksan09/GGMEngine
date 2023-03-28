@@ -7,11 +7,13 @@ public class PlayerShooter : MonoBehaviour
     public Gun gun;
     private PlayerInput playerInput;
     private PlayerMovement playerMovement;
+    private Animator animator;
 
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         playerMovement = GetComponent<PlayerMovement>();
+        animator = GetComponent<Animator>();
 
         playerInput.OnFirePressed += FireButtonHandle;
     }
@@ -22,7 +24,10 @@ public class PlayerShooter : MonoBehaviour
     {
         if (playerInput.Reload)
         {
-            gun.Reload();
+            if(gun.Reload())
+            {
+                animator.SetTrigger("Reload");
+            }
             //재장전 애니메이션 실행
         }
     }

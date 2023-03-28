@@ -13,7 +13,7 @@ public class Gun : MonoBehaviour
     }
     public State state { get; private set; }
 
-
+    
 
 
     #region 변수
@@ -21,8 +21,12 @@ public class Gun : MonoBehaviour
     public ParticleSystem muzzleFlashEffect;
     public float bulletLineEffectTime = 0.03f;
 
+    private AudioSource _audioSource;
+    public AudioClip _shootClip;
+    public AudioClip _reloadClip;
+
     private LineRenderer bulletLineRenderer;
-    public float damage = 25;
+    public float damage = 5;
 
     public float fireDistance = 100f; //발사가능 거리
 
@@ -35,6 +39,7 @@ public class Gun : MonoBehaviour
 
     private void Awake()
     {
+        _audioSource = GetComponent<AudioSource>();
         bulletLineRenderer = GetComponent<LineRenderer>();
         bulletLineRenderer.positionCount = 2;
         bulletLineRenderer.enabled = false;
@@ -48,6 +53,9 @@ public class Gun : MonoBehaviour
 
     private IEnumerator ShotEffect(Vector3 hitPosition)
     {
+        _audioSource.clip = _shootClip;
+        _audioSource.Play();
+
         muzzleFlashEffect.Play();
         bulletLineRenderer.SetPosition(0, firePosition.position);
         bulletLineRenderer.SetPosition(1, hitPosition);
@@ -59,6 +67,9 @@ public class Gun : MonoBehaviour
     }
     private IEnumerator ReloadRoutine()
     {
+        _audioSource.clip = _reloadClip;
+        _audioSource.Play();
+
         state = State.Reloading;
         yield return new WaitForSeconds(reloadTime);
         magAmmo = magCapacity;
@@ -84,11 +95,15 @@ public class Gun : MonoBehaviour
 
         if(Physics.Raycast(firePosition.position, firePosition.forward, out hit, fireDistance))
         {
-            var target = hit.collider.GetComponent<Damageable>();
+            var target = hit.collider.GetComponent<IDamageable>();
 
             if(target != null)
             {
                 target.OnDamage(damage, hit.point, hit.normal);
+            }
+            else
+            {
+                EffectManager.Instance.PlayHitEffect(hit.point, hit.normal);
             }
 
             hitPosition = hit.point;
