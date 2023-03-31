@@ -25,6 +25,7 @@ public class Barrel : MonoBehaviour, IDamageable
 
     public void OnDamage(float damage, Vector3 hitPosition, Vector3 hitNormal)
     {
+        EffectManager.Instance.PlayHitEffect(hitPosition, hitNormal);
         if(++hitCount == 3)
         {
             ExpBarrel();
