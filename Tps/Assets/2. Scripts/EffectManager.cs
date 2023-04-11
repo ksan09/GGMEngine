@@ -10,7 +10,7 @@ public class EffectManager : MonoBehaviour
     {
         get
         {
-            if (m_Instance == null) m_Instance = FindAnyObjectByType<EffectManager>();
+            if (m_Instance == null) m_Instance = FindObjectOfType<EffectManager>();
             return m_Instance;
         }
     }
