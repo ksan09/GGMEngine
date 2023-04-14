@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 public class MonsterControl : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class MonsterControl : MonoBehaviour
 
     private readonly int hashTrace = Animator.StringToHash("isTrace");
     private readonly int hashAttack = Animator.StringToHash("isAttack");
+
+    public UnityEvent OnDamageCast;
 
     private void Awake()
     {
@@ -64,6 +67,11 @@ public class MonsterControl : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void OnAnimationHit()
+    {
+        OnDamageCast?.Invoke();
     }
 
     private void OnDrawGizmos()
