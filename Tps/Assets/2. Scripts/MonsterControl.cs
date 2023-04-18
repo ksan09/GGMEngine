@@ -137,6 +137,10 @@ public class MonsterControl : MonoBehaviour
                     }
                     break;
                 case State.DIE:
+                    agent.isStopped = true;
+                    playerAnimator.SetTrigger("Death");
+                    isDie = true;
+                    GetComponent<CapsuleCollider>().enabled = false;
                     break;
                 default:
                     break;

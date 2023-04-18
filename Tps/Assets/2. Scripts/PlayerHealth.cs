@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHealth : LivingEntity
+public class PlayerHealth : LivingEntity
 {
     public override void OnDamage(float damage, Vector3 hitPos, Vector3 hitNormal)
     {
@@ -13,13 +13,12 @@ public class EnemyHealth : LivingEntity
     private IEnumerator ShowBloodEffect(Vector3 hitPos, Vector3 hitNormal)
     {
         EffectManager.Instance.PlayHitEffect(hitPos, hitNormal, transform, EffectManager.EffectType.Flesh);
+        CameraAction.instance.ShakeCam(4, 0.2f);
         yield return new WaitForSeconds(1.0f);
     }
 
     public override void Die()
     {
-        base.Die();
-        GetComponent<MonsterControl>().state = MonsterControl.State.DIE;
+        //ав╬Н
     }
-
 }
