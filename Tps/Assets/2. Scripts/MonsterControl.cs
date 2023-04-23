@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
-public class MonsterControl : MonoBehaviour
+public class MonsterControl : PoolableMono
 {
     public enum State
     {
@@ -151,5 +151,10 @@ public class MonsterControl : MonoBehaviour
 
             yield return new WaitForSeconds(0.3f);
         }
+    }
+
+    public override void Init()
+    {
+        isDie = false;
     }
 }

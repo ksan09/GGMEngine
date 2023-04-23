@@ -2826,6 +2826,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f5c57c47bf77af4a8834aebf5aca2a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  points: []
+  monster: {fileID: 8987798037715946931, guid: 64f29ce1c8ecf2840be38125a3bc2b44, type: 3}
+  createTime: 2
+  maxMonster: 10
 --- !u!1001 &1539829625
 PrefabInstance:
   m_ObjectHideFlags: 0
