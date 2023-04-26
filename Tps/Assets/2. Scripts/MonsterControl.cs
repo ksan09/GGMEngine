@@ -39,6 +39,7 @@ public class MonsterControl : PoolableMono
         playerTr = GameObject.FindWithTag("Player").GetComponent<Transform>();
         agent = GetComponent<NavMeshAgent>();
         playerAnimator = GetComponent<Animator>();
+        state = State.TRACE;
 
         StartCoroutine(CheckMonsterState());
         StartCoroutine(MonsterAction());
@@ -50,7 +51,7 @@ public class MonsterControl : PoolableMono
         Vector3 bias = transform.forward;
         Vector3 pos = transform.position;
 
-        pos.y += 1; // 몸통 높이로 올리기
+        pos.y += 1.8f; // 몸통 높이로 올리기
 
         for(int i = -60; i <= 60; i+=10)
         {
@@ -78,7 +79,7 @@ public class MonsterControl : PoolableMono
     {
         Vector3 bias = transform.forward;
         Vector3 pos = transform.position;
-        pos.y += 1;
+        pos.y += 1.8f;
         Gizmos.color = Color.red;
         for(int i = -60; i <= 60; ++i)
         {
@@ -98,9 +99,9 @@ public class MonsterControl : PoolableMono
 
             float dist = (playerTr.position - transform.position).sqrMagnitude;
 
-            if (dist <= attackDist * attackDist && CheckPlayer())
+            if (dist <= attackDist * attackDist)
                 state = State.ATTACK;
-            else if (dist <= traceDist * traceDist && CheckPlayer())
+            else if (dist <= traceDist * traceDist)
                 state = State.TRACE;
             else
                 state = State.IDLE;
@@ -141,6 +142,7 @@ public class MonsterControl : PoolableMono
                     playerAnimator.SetTrigger("Death");
                     isDie = true;
                     GetComponent<CapsuleCollider>().enabled = false;
+                    StartCoroutine("Delay");
                     break;
                 default:
                     break;
@@ -156,5 +158,23 @@ public class MonsterControl : PoolableMono
     public override void Init()
     {
         isDie = false;
+        GetComponent<CapsuleCollider>().enabled = true;
+    }
+
+    private void OnEnable()
+    {
+        StartCoroutine(CheckMonsterState());
+        StartCoroutine(MonsterAction());
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(1f);
+        PoolManager.Instance.Push(this);
     }
 }

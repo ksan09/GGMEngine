@@ -9,6 +9,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Enemy Create info")]
 
+    [SerializeField]
+    private PoolListSO initList;
+
     public List<Transform> points = new List<Transform>();
     public PoolableMono monster;
     public float createTime = 2.0f;
@@ -19,14 +22,15 @@ public class GameManager : MonoBehaviour
     {
         if (instance == null)
             instance = this;
+        else
+            Debug.LogError("Error : 다수의 게임 매니저");
 
-        PoolManager.Instance = new PoolManager(transform);
+        CreatePool();
     }
+
 
     private void Start()
     {
-        PoolManager.Instance.CreatePool(monster, maxMonster);
-
         Transform spawnPointGroup = GameObject.Find("SpawnPointGroup")?.transform;
         foreach (Transform point in spawnPointGroup)
             points.Add(point);
@@ -40,6 +44,14 @@ public class GameManager : MonoBehaviour
     {
         Cursor.lockState = state ? CursorLockMode.Locked : CursorLockMode.None;
         Cursor.visible = !state;
+    }
+    private void CreatePool()
+    {
+        PoolManager.Instance = new PoolManager(transform);
+        initList.Pairs.ForEach(p =>
+        {
+            PoolManager.Instance.CreatePool(p.Prefab, p.count);
+        });
     }
 
     private void Update()
