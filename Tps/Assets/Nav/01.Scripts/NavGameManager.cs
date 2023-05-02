@@ -54,7 +54,7 @@ public class NavGameManager : MonoBehaviour
     {
         Ray ray = _mainCam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        bool result = Physics.Raycast(ray, out hit, _mainCam.farClipPlane, _whatIsBase);
+        bool result = Physics.Raycast(ray, out hit, _mainCam.farClipPlane);
         if (result)
         {
             pos = hit.point;
