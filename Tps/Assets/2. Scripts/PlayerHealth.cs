@@ -21,4 +21,15 @@ public class PlayerHealth : LivingEntity
     {
         //ав╬Н
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (dead) return;
+
+        IItem item = other.GetComponent<IItem>();
+        if(item != null)
+        {
+            item.Use(gameObject);
+        }
+    }
 }

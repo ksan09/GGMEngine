@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PoolListSO initList;
 
+    private int _score = 0;
+    private bool _isGameover = false;
+
     public List<Transform> points = new List<Transform>();
     public PoolableMono monster;
     public float createTime = 2.0f;
@@ -74,5 +77,10 @@ public class GameManager : MonoBehaviour
         PoolableMono _mob = PoolManager.Instance.Pop("Monster");
 
         _mob?.transform.SetPositionAndRotation(points[idx].position, points[idx].rotation);
+    }
+
+    public void AddScore(int score)
+    {
+        _score += score;
     }
 }

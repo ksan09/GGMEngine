@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator animator;
 
+    public GameObject followCam;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     void LateUpdate()
     {
         PlayerMove();
-        //PlayerRotate();
+        PlayerRotate();
         UpdateAnimation(playerInput.moveDir);
     }
 
@@ -37,11 +39,14 @@ public class PlayerMovement : MonoBehaviour
  
     void PlayerRotate()
     {
-        Vector3 target = playerInput.mousePos;
-        Vector3 dir = target - transform.position;
-        dir.y = 0;
-        transform.rotation = Quaternion.LookRotation(dir.normalized);
+        float mouseX = playerInput.mouseX;
+        float mouseY = playerInput.mouseY;
+
+        mouseY = Mathf.Clamp(mouseY, -60f, 60f);
         
+
+        transform.eulerAngles = new Vector3(0, mouseX, 0);
+        followCam.transform.eulerAngles = new Vector3(-mouseY, mouseX, 0);
     }
 
     private void UpdateAnimation(Vector2 moveInput)
