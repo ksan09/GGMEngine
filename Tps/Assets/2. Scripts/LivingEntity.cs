@@ -32,7 +32,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
     // 체력 회복 기능
     public virtual void RestoreHealth(float newHealth)
     {
-        if (!dead) return;
+        if (dead) return;
 
         health += newHealth;
     }

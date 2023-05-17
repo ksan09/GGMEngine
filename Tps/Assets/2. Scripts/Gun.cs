@@ -47,12 +47,6 @@ public class Gun : MonoBehaviour
         lastFireTime = 0f;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public bool Fire()
     {
         //발사 가능한 조건
@@ -98,6 +92,7 @@ public class Gun : MonoBehaviour
         {
             state = State.Empty;
         }
+        UIManager.Instance.UpdateAmmoText(magAmmo);
     }
 
     private IEnumerator ShotEffect(Vector3 hitPosition)
@@ -135,6 +130,7 @@ public class Gun : MonoBehaviour
         yield return new WaitForSeconds(reloadTime);
         magAmmo = magCapacity;
         state = State.Ready;
+        UIManager.Instance.UpdateAmmoText(magAmmo);
     }
 
 

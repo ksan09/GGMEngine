@@ -82,5 +82,6 @@ public class GameManager : MonoBehaviour
     public void AddScore(int score)
     {
         _score += score;
+        UIManager.Instance.UpdateScoreText(score);
     }
 }

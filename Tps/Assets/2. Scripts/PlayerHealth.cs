@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class PlayerHealth : LivingEntity
 {
+    private int life = 3;
+
     public override void OnDamage(float damage, Vector3 hitPos, Vector3 hitNormal)
     {
         base.OnDamage(damage, hitPos, hitNormal);
         StartCoroutine(ShowBloodEffect(hitPos, hitNormal));
+
+        UpdateUI();
     }
 
     private IEnumerator ShowBloodEffect(Vector3 hitPos, Vector3 hitNormal)
@@ -17,9 +21,18 @@ public class PlayerHealth : LivingEntity
         yield return new WaitForSeconds(1.0f);
     }
 
+    public override void RestoreHealth(float newHealth)
+    {
+        if (dead) return;
+
+        base.RestoreHealth(newHealth);
+        UpdateUI();
+    }
+
     public override void Die()
     {
         //ав╬Н
+        UIManager.Instance.UpdateLifeText(life);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,5 +44,10 @@ public class PlayerHealth : LivingEntity
         {
             item.Use(gameObject);
         }
+    }
+
+    private void UpdateUI()
+    {
+        UIManager.Instance.UpdateHealthText(dead ? 0f : health);
     }
 }
