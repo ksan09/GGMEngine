@@ -800,6 +800,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!195 &2636494063784490648
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -850,8 +851,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   state: 0
-  traceDist: 10
-  attackDist: 2
+  traceDist: 5
+  attackDist: 1.5
   isDie: 0
 --- !u!114 &5337809364461275966
 MonoBehaviour:

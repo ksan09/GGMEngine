@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
 
-public class MonsterCtrl : PoolableMono
+public class MonsterCtrl : MonoBehaviour
 {
     public UnityEvent OnDamageCast;
 
@@ -69,7 +69,7 @@ public class MonsterCtrl : PoolableMono
             //  float distance = Vector3.Distance(playerTr.position, transform.position);
             float dist = (playerTr.position - transform.position).sqrMagnitude;
 
-            if (dist <= attackDist * attackDist)
+            if (dist <= attackDist * attackDist && checkPlayer())
             {
                 state = State.ATTACK;
             }
@@ -113,9 +113,9 @@ public class MonsterCtrl : PoolableMono
                     isDie = true;
                     agent.isStopped = true;
                     anim.SetTrigger(hashDie);
-                    // GetComponent<CapsuleCollider>().enabled = false;
+                    GetComponent<CapsuleCollider>().enabled = false;
                     yield return new WaitForSeconds(1f);
-                    PoolManager.Instance.Push(this);
+                    //PoolManager.Instance.Push(this);
                     break;
             }
             yield return new WaitForSeconds(0.3f);
@@ -124,20 +124,14 @@ public class MonsterCtrl : PoolableMono
 
     private bool checkPlayer()
     {
-        Vector3 bias = transform.forward;
-        Vector3 pos = transform.position;
-        pos.y += 1; //ray를 player의 몸통 높이까지 올리기 위해
-        for (int i = -60; i <= 60; i += 10)
+        Vector3 dir = playerTr.position - transform.position;
+        Ray ray = new Ray(transform.position, dir.normalized);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, traceDist))
         {
-            Vector3 dir = Quaternion.Euler(0, -i, 0) * bias;
-            Ray ray = new Ray(pos, dir.normalized);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, traceDist))
+            if (hit.collider.tag == "Player")
             {
-                if (hit.collider.tag == "Player")
-                {
-                    return true;
-                }
+                return true;
             }
         }
         return false;
@@ -170,13 +164,12 @@ public class MonsterCtrl : PoolableMono
         }
     }
 
-
-    public void OnAnimationHit()
+    public void OnAttackAnimation()
     {
         OnDamageCast?.Invoke();
     }
 
-    public override void Init()
+    public void Init()
     {
         LivingEntity livingEntity = this.GetComponent<LivingEntity>();
         livingEntity.initHealth = 100;
