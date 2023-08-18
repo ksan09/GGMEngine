@@ -1,0 +1,60 @@
+.btn {
+    background-color: rgba(58, 90, 231, 255);
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    color: rgba(255, 255, 255, 255);
+    border-left-color: rgba(41, 69, 192, 255);
+    border-right-color: rgba(41, 69, 192, 255);
+    border-top-color: rgba(41, 69, 192, 255);
+    border-bottom-color: rgba(41, 69, 192, 255);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    transition-duration: 0.5s;
+}
+
+.btn:hover {
+    background-color: rgba(102, 190, 250, 255);
+    border-left-color: rgba(103, 190, 251, 255);
+    border-right-color: rgba(103, 190, 251, 255);
+    border-top-color: rgba(103, 190, 251, 255);
+    border-bottom-color: rgba(103, 190, 251, 255);
+}
+
+.window {
+    transition-duration: 0.7s;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+}
+
+.fade {
+    opacity: 0.1;
+    position: absolute;
+    top: 120%;
+}
+
+.msg {
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 255);
+    justify-content: flex-start;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    transition-duration: 0.5s;
+    transition-property: translate;
+    translate: 1% 0;
+}
+
+.msg.off {
+    opacity: 0.3;
+    transition-property: translate;
+    transition-duration: 0.5s;
+    translate: 110% 0;
+}

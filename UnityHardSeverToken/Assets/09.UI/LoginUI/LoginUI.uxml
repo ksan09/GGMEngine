@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UI/common.uss?fileID=7433441132597879392&amp;guid=f2dd791aa211b0e44bc7c4e2ddfd7a69&amp;type=3#common" />
+    <ui:VisualElement name="LoginWindow" class="window" style="background-color: rgba(0, 0, 0, 0); width: 500px; height: 250px;" />
+</ui:UXML>

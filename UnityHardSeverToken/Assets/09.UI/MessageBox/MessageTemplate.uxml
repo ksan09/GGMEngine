@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UI/MessageBox/MessageBoxUSS.uss?fileID=7433441132597879392&amp;guid=9bb9efabd52ed9f42ab801d7a91c5a29&amp;type=3#MessageBoxUSS" />
+    <ui:VisualElement name="MessageBox" class="msg" style="margin-bottom: 10px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px;">
+        <ui:VisualElement name="Icon" style="background-color: rgba(0, 0, 0, 0); width: 32px; height: 32px; background-image: url(&apos;project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-6090568113533005507&amp;guid=ec6889921684bdf43a3f3cf8abe523f0&amp;type=3#check&apos;); -unity-background-image-tint-color: rgb(255, 255, 255); margin-right: 10px;" />
+        <ui:Label text="This is Message" display-tooltip-when-elided="true" name="Msg" style="flex-grow: 1; font-size: 15px; -unity-font-style: bold; color: rgb(255, 255, 255);" />
+    </ui:VisualElement>
+</ui:UXML>

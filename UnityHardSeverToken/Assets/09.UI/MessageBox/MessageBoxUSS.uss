@@ -1,0 +1,20 @@
+.msg {
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 255);
+    justify-content: flex-start;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    transition-duration: 0.5s;
+    transition-property: translate;
+    translate: 0 0;
+}
+
+.msg.off {
+    opacity: 0.3;
+    transition-property: translate;
+    transition-duration: 0.5s;
+    translate: 110% 0;
+}

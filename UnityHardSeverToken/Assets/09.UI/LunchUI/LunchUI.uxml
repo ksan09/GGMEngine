@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UI/Common.uss?fileID=7433441132597879392&amp;guid=2d6c420fe6d78804890d4514bc151736&amp;type=3#Common" />
+    <ui:VisualElement name="LunchContainer" class="window" style="flex-basis: auto; width: 500px; height: 400px; background-color: rgb(0, 0, 0);">
+        <ui:VisualElement name="Header" style="flex-basis: 60px; flex-direction: row; padding-left: 15px; padding-right: 15px; padding-top: 5px; padding-bottom: 5px; background-color: rgb(255, 255, 255);">
+            <ui:TextField picking-mode="Ignore" value="filler text" name="DateTextField" style="flex-grow: 1;" />
+            <ui:Button text="Load" display-tooltip-when-elided="true" name="LoadBtn" class="btn" style="padding-left: 12px; padding-right: 12px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Content" style="flex-grow: 1; padding-left: 15px; padding-right: 15px; padding-top: 12px;">
+            <ui:Label text="이곳에 급식 메뉴가 나옵니다." display-tooltip-when-elided="true" name="LunchLabel" style="flex-grow: 1; padding-left: 12px; padding-right: 12px; padding-top: 8px; padding-bottom: 8px; background-color: rgb(185, 185, 185); border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; color: rgb(0, 0, 0); font-size: 15px;" />
+            <ui:VisualElement name="MenuLow" style="flex-basis: 60px; flex-direction: row-reverse; padding-top: 15px; padding-bottom: 15px;">
+                <ui:Button text="닫기" display-tooltip-when-elided="true" name="CloseBtn" class="btn" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 12px; padding-right: 12px; padding-top: 0; padding-bottom: 0; font-size: 14px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
