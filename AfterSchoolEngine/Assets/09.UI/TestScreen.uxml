@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Container" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="ButtonBox" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; right: 20px; top: 20px;">
+            <ui:Button text="Host" display-tooltip-when-elided="true" name="HostBtn" style="font-size: 32px;" />
+            <ui:Button text="Client" display-tooltip-when-elided="true" name="ClientBtn" style="font-size: 32px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
