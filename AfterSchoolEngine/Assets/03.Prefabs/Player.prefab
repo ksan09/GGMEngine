@@ -567,6 +567,7 @@ GameObject:
   - component: {fileID: 3447400477452719541}
   - component: {fileID: 4392521296751654099}
   - component: {fileID: 7867423800869681214}
+  - component: {fileID: 5682297377629508425}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -756,6 +757,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &5682297377629508425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5341708561920347200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c5df2dec97800a4dbc15b5bc72a70f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  totalCoins:
+    m_InternalValue: 0
 --- !u!1 &8972021892122181416
 GameObject:
   m_ObjectHideFlags: 0
