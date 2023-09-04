@@ -14,6 +14,7 @@ namespace BehaviourTree
         NONE = 0,
         CHASING = 1,
         SHOOT = 2,
+        RELOADING = 3,
     }
 
     public abstract class Node

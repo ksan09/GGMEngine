@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using BehaviourTree;
 using System;
+using UnityEngine.InputSystem;
 
 public class SimpleEnemyBrain : EnemyBrain
 {
@@ -25,14 +26,23 @@ public class SimpleEnemyBrain : EnemyBrain
             TryToTalk("...");
         }
 
+        if(Keyboard.current.pKey.IsPressed())
+        {
+            Attack();
+        }
     }
 
     private void ConstructAITree()
     {
         Transform me = transform;
-        RangeNode shootingRange = new RangeNode(8f, _targetTrm, me);
-        ShootNode shootNode = new ShootNode(_navAgent, this, 1f);
 
+        NeedReloding needReloding = new NeedReloding(_enemyAttack as EnemyGunAttack);
+        ReloadNode reloadNode = new ReloadNode(this, _enemyAttack as EnemyGunAttack);
+        Sequence reloadSeq =
+            new Sequence(new List<Node>() { needReloding, reloadNode });
+
+        RangeNode shootingRange = new RangeNode(8f, _targetTrm, me);
+        ShootNode shootNode = new ShootNode(_navAgent, this);
         Sequence attackSeq = 
             new Sequence(new List<Node>() { shootingRange, shootNode });
 
@@ -41,6 +51,11 @@ public class SimpleEnemyBrain : EnemyBrain
         Sequence chaseSeq =
             new Sequence(new List<Node>() { chaseRange, chaseNode });
 
-        _topNode = new Selector(new List<Node>() { attackSeq, chaseSeq }); 
+        _topNode = new Selector(new List<Node>() { reloadSeq, attackSeq, chaseSeq }); 
+    }
+
+    public override void Attack()
+    {
+        _enemyAttack.Attack();
     }
 }
