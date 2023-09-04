@@ -15,6 +15,7 @@ public class ChaseNode : Node
         _agent = agent;
         _target = target;
         _enemyBrain = enemyBrain;
+        _code = NodeActionCode.CHASING;
     }
 
     public override NodeState Evaluate()
@@ -25,17 +26,18 @@ public class ChaseNode : Node
             _agent.isStopped = false;
             _agent.SetDestination(_target.position);
 
-            if(_nodeState != NodeState.RUNNING)
+            if(_enemyBrain.currentCode != _code)
             {
+                _enemyBrain.currentCode = _code;
                 _enemyBrain.TryToTalk("추적! 시작한다!");
-                _nodeState = NodeState.RUNNING;
             }
+            _nodeState = NodeState.RUNNING;
+            return _nodeState;
         }
-        else
-        {
-            _agent.isStopped = true;
-            _nodeState = NodeState.SUCCESS;
-        }
+        
+        _agent.isStopped = true;
+        _nodeState = NodeState.SUCCESS;
+        
         return _nodeState;
     }
 }

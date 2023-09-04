@@ -20,21 +20,21 @@ public class InputP : MonoBehaviour
 
         _keyAction.UI.Submit.performed += UISubmitPressed;
 
-        _keyAction.Player.Disable();
-        _keyAction.Player.Jump.PerformInteractiveRebinding()
-            .WithControlsExcluding("Mouse")
-            .WithCancelingThrough("<keyboard>/escape")
-            .OnComplete( op =>
-            {
-                op.Dispose();
-                _keyAction.Player.Enable();
-            })
-            .OnCancel(op =>
-            {
-                op.Dispose();
-                _keyAction.Player.Enable();
-            })
-            .Start();
+        //_keyAction.Player.Disable();
+        //_keyAction.Player.Jump.PerformInteractiveRebinding()
+        //    .WithControlsExcluding("Mouse")
+        //    .WithCancelingThrough("<keyboard>/escape")
+        //    .OnComplete( op =>
+        //    {
+        //        op.Dispose();
+        //        _keyAction.Player.Enable();
+        //    })
+        //    .OnCancel(op =>
+        //    {
+        //        op.Dispose();
+        //        _keyAction.Player.Enable();
+        //    })
+        //    .Start();
     }
 
     private bool _uiMode = false;

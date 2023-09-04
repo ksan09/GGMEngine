@@ -9,11 +9,22 @@ namespace BehaviourTree
         RUNNING = 3,
     }
 
+    public enum NodeActionCode
+    {
+        NONE = 0,
+        CHASING = 1,
+        SHOOT = 2,
+    }
+
     public abstract class Node
     {
         protected NodeState _nodeState;
 
         public NodeState nodeState => _nodeState;
+
+        protected NodeActionCode _code = NodeActionCode.NONE;
+
+        
 
         //노드의 상태를 판단하는 메서드
         public abstract NodeState Evaluate();

@@ -15,11 +15,18 @@ public class ShootNode : Node
         _agent = agent;
         _brain = brain;
         _coolTime = coolTime;
+        _code = NodeActionCode.SHOOT;
     }
 
     public override NodeState Evaluate()
     {
         _agent.isStopped = true;    // 정지
+
+        if(_brain.currentCode != _code)
+        {
+            _brain.TryToTalk("공격상태로 전환");
+            _brain.currentCode = _code;
+        }
 
         if(_coolTime + _lastFireTime <= Time.time)
         {
