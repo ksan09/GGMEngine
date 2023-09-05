@@ -12,6 +12,7 @@ public class MenuScreen : MonoBehaviour
 {
     private TextField _txtIpAddress;
     private TextField _txtPort;
+    private TextField _txtJoincode;
     private UIDocument _uiDocument;
     private const string GameSceneName = "Game";
 
@@ -28,11 +29,27 @@ public class MenuScreen : MonoBehaviour
         var root = _uiDocument.rootVisualElement;
         _txtIpAddress = root.Q<TextField>("txt-ip-address");
         _txtPort = root.Q<TextField>("txt-port");
+        _txtJoincode = root.Q<TextField>("txt-joincode");
 
-        root.Q<Button>("btn-local-host").
-            RegisterCallback<ClickEvent>(OnHandleLocalHost);
-        root.Q<Button>("btn-local-client").
-            RegisterCallback<ClickEvent>(OnHandleLocalClient);
+        root.Q<Button>("btn-local-host")
+            .RegisterCallback<ClickEvent>(OnHandleLocalHost);
+        root.Q<Button>("btn-local-client")
+            .RegisterCallback<ClickEvent>(OnHandleLocalClient);
+        root.Q<Button>("btn-relay-host")
+            .RegisterCallback<ClickEvent>(OnHandleRelayHost);
+        root.Q<Button>("btn-joincode")
+            .RegisterCallback<ClickEvent>(OnHandleRelayJoin);
+    }
+
+    private async void OnHandleRelayJoin(ClickEvent evt)
+    {
+        string code = _txtJoincode.value;
+        await ClientSingletone.Instance.GameManager.StartClientAsync(code);
+    }
+
+    private async void OnHandleRelayHost(ClickEvent evt)
+    {
+        await HostSingletone.Instance.GameManager.StartHostAsync();
     }
 
     private void OnDisable()

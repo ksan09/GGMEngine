@@ -10,14 +10,23 @@
                 <ui:Button text="Client" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-local-client" class="btn" />
             </ui:VisualElement>
             <ui:VisualElement name="menu-row" class="menu-row" style="flex-grow: 1;">
-                <ui:Button text="Relay Host" parse-escape-sequences="true" display-tooltip-when-elided="true" name="bnt-relay-host" class="btn" />
+                <ui:Button text="Relay Host" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-relay-host" class="btn" />
             </ui:VisualElement>
             <ui:VisualElement name="menu-row" class="menu-row" style="flex-grow: 1;">
-                <ui:Button text="Lobby" parse-escape-sequences="true" display-tooltip-when-elided="true" name="bnt-lobby" class="btn" />
+                <ui:Button text="Lobby" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-lobby" class="btn" />
             </ui:VisualElement>
             <ui:VisualElement name="menu-row" class="menu-row" style="flex-grow: 1;">
                 <ui:TextField picking-mode="Ignore" value="Join code here!" name="txt-joincode" style="flex-grow: 1;" />
-                <ui:Button text="Lobby" parse-escape-sequences="true" display-tooltip-when-elided="true" name="bnt-joincode" class="btn" />
+                <ui:Button text="Lobby" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-joincode" class="btn" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="popup-panel" style="flex-grow: 1;">
+        <ui:VisualElement name="lobby-frame">
+            <ui:ScrollView name="lobby-container" />
+            <ui:Button parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-close" style="translate: 50% -50%;" />
+            <ui:VisualElement name="btn-row" style="flex-grow: 1; flex-direction: row; justify-content: flex-end;">
+                <ui:Button text="Refresh" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-refresh" class="btn" style="flex-grow: 0; font-size: 24px;" />
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
