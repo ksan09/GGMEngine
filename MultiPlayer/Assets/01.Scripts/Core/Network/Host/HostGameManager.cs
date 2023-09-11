@@ -21,6 +21,8 @@ public class HostGameManager
     private string _lobbyId;
     private Allocation _allocation;
 
+    private NetworkServer _networkServer;
+
     public async Task StartHostAsync()
     {
         try
@@ -75,6 +77,7 @@ public class HostGameManager
             return;
         }
 
+        _networkServer = new NetworkServer(NetworkManager.Singleton);
         NetworkManager.Singleton.StartHost();
         NetworkManager.Singleton.SceneManager
             .LoadScene(GameSceneName, LoadSceneMode.Single);

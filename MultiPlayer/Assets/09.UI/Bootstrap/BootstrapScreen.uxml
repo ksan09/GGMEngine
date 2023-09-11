@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UI/Common.uss?fileID=7433441132597879392&amp;guid=6b7ae2eb940829047903a0b0488257b8&amp;type=3#Common" />
+    <ui:VisualElement name="container" style="flex-grow: 1; align-items: center; justify-content: center; align-self: center;">
+        <ui:VisualElement name="input-panel">
+            <ui:Label tabindex="-1" text="게임에 사용할 ID 입력" parse-escape-sequences="true" display-tooltip-when-elided="true" name="info-label" style="font-size: 64px; color: rgb(255, 255, 255); -unity-text-outline-width: 3px; -unity-text-outline-color: rgb(0, 0, 0); -unity-font-style: bold; -unity-text-align: upper-center; margin-right: 48px; margin-left: 48px; padding-bottom: 16px;" />
+            <ui:TextField picking-mode="Ignore" name="name-text-field" style="font-size: 48px; padding-bottom: 16px;" />
+            <ui:Button text="Connect to server" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-connect" class="btn" style="font-size: 48px; padding-top: 12px; padding-bottom: 12px; padding-right: 20px; padding-left: 20px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

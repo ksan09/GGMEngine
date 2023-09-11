@@ -10,11 +10,17 @@ using UnityEngine.UIElements;
 
 public class MenuScreen : MonoBehaviour
 {
+    [SerializeField]
+    private VisualTreeAsset _lobbyTemplate;
+
     private TextField _txtIpAddress;
     private TextField _txtPort;
     private TextField _txtJoincode;
+
     private UIDocument _uiDocument;
     private const string GameSceneName = "Game";
+    private VisualElement _popupPanel;
+    private LobbyUI _lobbyUI;
 
     private void Awake()
     {
@@ -31,6 +37,10 @@ public class MenuScreen : MonoBehaviour
         _txtPort = root.Q<TextField>("txt-port");
         _txtJoincode = root.Q<TextField>("txt-joincode");
 
+        _popupPanel = root.Q<VisualElement>("popup-panel");
+        var lobbyRoot = _popupPanel.Q<VisualElement>("lobby-frame");
+        _lobbyUI = new LobbyUI(_lobbyTemplate, lobbyRoot, _popupPanel);
+
         root.Q<Button>("btn-local-host")
             .RegisterCallback<ClickEvent>(OnHandleLocalHost);
         root.Q<Button>("btn-local-client")
@@ -39,6 +49,15 @@ public class MenuScreen : MonoBehaviour
             .RegisterCallback<ClickEvent>(OnHandleRelayHost);
         root.Q<Button>("btn-joincode")
             .RegisterCallback<ClickEvent>(OnHandleRelayJoin);
+        root.Q<Button>("btn-lobby")
+            .RegisterCallback<ClickEvent>(OnHandleLobbyOpen);
+    }
+
+    private void OnHandleLobbyOpen(ClickEvent evt)
+    {
+        _popupPanel.AddToClassList("on");
+        //로비 리프레시 한 번 들어가야 하는데 아직 구현 안됨
+        _lobbyUI.RefreshList();
     }
 
     private async void OnHandleRelayJoin(ClickEvent evt)
@@ -54,6 +73,7 @@ public class MenuScreen : MonoBehaviour
 
     private void OnDisable()
     {
+        if (NetworkManager.Singleton == null) return;
         NetworkManager.Singleton.OnClientDisconnectCallback
             -= HandleClientDisconnected;
     }
