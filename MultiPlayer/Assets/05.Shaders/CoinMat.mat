@@ -42,7 +42,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _ShineOffset: 0.1
-    - _Speed: 0.759
+    - _Speed: 0.655
     - _ViewOffset: 0
     m_Colors:
     - _HighlightColor: {r: 2.9960783, g: 2.9960783, b: 2.9960783, a: 1}
