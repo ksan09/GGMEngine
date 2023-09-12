@@ -3,22 +3,25 @@ using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
+using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ClientGameManager
+public class ClientGameManager : IDisposable
 {
     private const string MenuSceneName = "Menu";
     private JoinAllocation _allocation;
+    private NetworkClient _networkClient;
 
     public async Task<bool> InitAsync()
     {
         // 플레이어 (게임) 인증
         await UnityServices.InitializeAsync(); //유니티 서비스 초기화
 
+        _networkClient = new NetworkClient(NetworkManager.Singleton);
         //5번 시도해서 나온 결과를 받는다.
         AuthState authState = await AuthenticationWrapper.DoAuth();
 
@@ -53,6 +56,25 @@ public class ClientGameManager
         var relayServerData = new RelayServerData(_allocation, "dtls");
         transport.SetRelayServerData(relayServerData);
 
+        UserData userData = new UserData
+        {
+            username = PlayerPrefs.GetString(BootstrapScreen.PlayerNameKey, "Unknown"),
+            userAuthId = AuthenticationService.Instance.PlayerId
+        };
+
+        NetworkManager.Singleton.NetworkConfig.ConnectionData = userData.Serialize().ToArray();
+        
+
         NetworkManager.Singleton.StartClient();
+    }
+
+    public void Dispose()
+    {
+        _networkClient?.Dispose();
+    }
+
+    public void Disconnect()
+    {
+        _networkClient.Disconnect();
     }
 }

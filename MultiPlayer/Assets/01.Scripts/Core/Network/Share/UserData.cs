@@ -7,25 +7,53 @@ using UnityEngine;
 public class UserData
 {
     public string username;
+    public string userAuthId;
 
-    public byte[] Serialize()
+    public ArraySegment<byte> Serialize()
     {
-        byte[] strBuffer = Encoding.UTF8.GetBytes(username);
-        ushort strLen = (ushort)strBuffer.Length;
+        ArraySegment<byte> segment = SendBufferHelper.Open(1024);
+        Span<byte> span = new Span<byte>(segment.Array, segment.Offset, segment.Count);
 
-        byte[] lenBuffer = BitConverter.GetBytes(strLen); //2πŸ¿Ã∆Æ
+        ushort count = 0;
+        bool success = true;
 
-        byte[] result = new byte[lenBuffer.Length + strBuffer.Length];
-        Array.Copy(lenBuffer, 0, result, 0, lenBuffer.Length);
-        Array.Copy(strBuffer, 0, result, lenBuffer.Length, strBuffer.Length);
+        ushort nameLen = (ushort)Encoding.UTF8.GetByteCount(username);
+        success &= BitConverter.TryWriteBytes(span.Slice(count, span.Length - count), nameLen);
+        count += sizeof(ushort);
 
-        return result;
+        byte[] nameArr = Encoding.UTF8.GetBytes(username);
+        Array.Copy(nameArr, 0, segment.Array, count, nameLen);
+        count += nameLen;
+
+        ushort authLen = (ushort)Encoding.UTF8.GetByteCount(userAuthId);
+        success &= BitConverter.TryWriteBytes(span.Slice(count, span.Length - count), authLen);
+        count += sizeof(ushort);
+
+        byte[] authArr = Encoding.UTF8.GetBytes(userAuthId);
+        Array.Copy(authArr, 0, segment.Array, count, authLen);
+        count += authLen;
+
+        if(!success)
+        {
+            Debug.LogError("Packet serialize error!");
+            return null;
+        }
+
+        return SendBufferHelper.Close(count);
     }
 
     public void Deserialize(byte[] payload)
     {
-        ushort len = BitConverter.ToUInt16(payload, 0);
-        username = Encoding.UTF8.GetString(payload, 2, len);
+        int count = 0;
+        ushort nameLen = BitConverter.ToUInt16(payload, count);
+        count += sizeof(ushort);
+        username = Encoding.UTF8.GetString(payload, count, nameLen);
+        count += nameLen;
+
+        ushort authLen = BitConverter.ToUInt16(payload, count);
+        count += sizeof(ushort);
+        userAuthId = Encoding.UTF8.GetString(payload, count, authLen);
+        //count += authLen;
     }
 
 }
