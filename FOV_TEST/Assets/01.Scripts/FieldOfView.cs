@@ -14,10 +14,11 @@ public class FieldOfView : MonoBehaviour
         public float angle;
     }
 
-
-
-
-
+    public struct EdgeInfo
+    {
+        public Vector3 pointA;
+        public Vector3 pointB;
+    }
 
     [Range(0, 360)]
     public float viewAngle;
@@ -29,6 +30,8 @@ public class FieldOfView : MonoBehaviour
     public List<Transform> visibleTargets = new List<Transform>();
 
     [SerializeField] private float _meshResolution;
+    [SerializeField] private int _edgeResolution;           //탐색횟수
+    [SerializeField] private float _edgeDistanceThreshold;  //같은 장애물인지 판단할 거리
 
     private MeshFilter _viewMeshFilter;
     private Mesh _viewMesh;
@@ -48,7 +51,7 @@ public class FieldOfView : MonoBehaviour
         StartCoroutine(FindEnemyWithDelay(_enemyFindDelay));
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         DrawFieldOfView();
     }
@@ -63,14 +66,39 @@ public class FieldOfView : MonoBehaviour
 
         List<Vector3> viewPoints = new List<Vector3>();
         //나의 위치부터
-        for(int i = 0; i < stepCount; i++)
+
+        var oldViewCastInfo = new ViewCastInfo();
+        for (int i = 0; i < stepCount; i++)
         {
             float angle = transform.eulerAngles.y - viewAngle * 0.5f
                 + stepAngleSize * i;
             //현재 로테이션 어쩌구 저쩌구
 
             var info = ViewCast(angle);
+
+            if(i > 0)
+            {
+                bool edgeDistOver = 
+                    Mathf.Abs(oldViewCastInfo.distance - info.distance) > _edgeDistanceThreshold;
+
+                if(oldViewCastInfo.hit != info.hit ||
+                    (oldViewCastInfo.hit && info.hit && edgeDistOver))
+                {
+                    var edge = FindEdge(oldViewCastInfo, info);
+
+                    if(edge.pointA != Vector3.zero)
+                    {
+                        viewPoints.Add(edge.pointA);
+                    }
+                    if(edge.pointB != Vector3.zero)
+                    {
+                        viewPoints.Add(edge.pointB);
+                    }
+                }
+            }
+
             viewPoints.Add(info.point);
+            oldViewCastInfo = info;
         }
         int vertexCnt = viewPoints.Count + 1;
         Vector3[] verties = new Vector3[vertexCnt];
@@ -86,9 +114,40 @@ public class FieldOfView : MonoBehaviour
             triangles[trianglesIdx++] = i+2;
         }
 
+        _viewMesh.Clear();
         _viewMesh.vertices = verties;
         _viewMesh.triangles = triangles;
         _viewMesh.RecalculateNormals();
+    }
+
+    private EdgeInfo FindEdge(ViewCastInfo minViewCast,
+        ViewCastInfo maxViewCast)
+    {
+        float minAngle = minViewCast.angle;
+        float maxAngle = maxViewCast.angle;
+
+        Vector3 minPoint = Vector3.zero;//minViewCast.point;
+        Vector3 maxPoint = Vector3.zero;//maxViewCast.point;
+
+        for(int i = 0; i < _edgeResolution; ++i)
+        {
+            ViewCastInfo mid = ViewCast((minAngle + maxAngle) / 2);
+            bool edgeDistThresHoldExceeded = 
+                Mathf.Abs(minViewCast.distance - mid.distance) > _edgeDistanceThreshold;
+
+            if(mid.hit == minViewCast.hit && !edgeDistThresHoldExceeded)
+            {
+                minAngle = mid.angle;
+                minPoint = mid.point;
+            }
+            else
+            {
+                maxAngle = mid.angle;
+                maxPoint = mid.point;
+            }
+        }
+
+        return new EdgeInfo { pointA = minPoint, pointB = maxPoint };
     }
 
     private ViewCastInfo ViewCast(float globalAngle)

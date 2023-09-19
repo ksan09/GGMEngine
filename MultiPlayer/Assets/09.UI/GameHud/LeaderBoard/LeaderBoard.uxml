@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UI/GameHud/LeaderBoard/LeaderBoard.uss?fileID=7433441132597879392&amp;guid=81e5a7e4f421720479bad9be0fb1f4eb&amp;type=3#LeaderBoard" />
+    <ui:VisualElement name="leaderboard">
+        <ui:VisualElement name="inner-holder" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>

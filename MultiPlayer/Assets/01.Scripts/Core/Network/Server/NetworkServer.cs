@@ -28,6 +28,9 @@ public class NetworkServer : IDisposable
         _authToUserDataDictinary[data.userAuthId] = data;
 
         res.Approved = true;
+        res.Position = TankSpawnPoint.GerRandomSpawnPos();
+        res.Rotation = Quaternion.identity;
+        //이나블 모든 위치중 랜덤 위치
         res.CreatePlayerObject = true;
     }
 
@@ -57,5 +60,17 @@ public class NetworkServer : IDisposable
         {
             _networkManager.Shutdown();
         }
+    }
+
+    public UserData GetUserDataByClientId(ulong clientId)
+    {
+        if(_clientToAuthDictinary.TryGetValue(clientId, out string authId))
+        {
+            if(_authToUserDataDictinary.TryGetValue(authId, out UserData data))
+            {
+                return data;
+            }
+        }
+        return null;
     }
 }

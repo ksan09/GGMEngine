@@ -22,7 +22,7 @@ public class HostGameManager : IDisposable
     private string _lobbyId;
     private Allocation _allocation;
 
-    private NetworkServer _networkServer;
+    public NetworkServer NetworkServer { get; private set; }
     public async void Shutdown()
     {
         HostSingletone.Instance.StopCoroutine(nameof(HeartBeatLobby));
@@ -39,7 +39,7 @@ public class HostGameManager : IDisposable
         }
 
         _lobbyId = String.Empty;
-        _networkServer?.Dispose();
+        NetworkServer?.Dispose();
     }
 
     public void Dispose()
@@ -104,7 +104,7 @@ public class HostGameManager : IDisposable
             return;
         }
 
-        _networkServer = new NetworkServer(NetworkManager.Singleton);
+        NetworkServer = new NetworkServer(NetworkManager.Singleton);
 
         UserData userData = new UserData
         {
