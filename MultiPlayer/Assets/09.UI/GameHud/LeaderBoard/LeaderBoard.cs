@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -63,20 +64,22 @@ public class LeaderBoard
     public void SortOrder()
     {
         //이거 다음시간
+        //b-a 내림차, a-b 오름차
+        _itemList.Sort((a, b) => b.Coins.CompareTo(a.Coins)); // 이건 내림차순
+        for(int i = 0; i < _itemList.Count; ++i)
+        {
+            var item = _itemList[i];
+            item.rank = i + 1; // 등수 기록
+            item.Root.BringToFront();
+            item.UpdateText();
 
-        _itemList.OrderBy(x => x.Coins);
+            item.Show(i < _displayCount); // 표현해야할 수보다 작으면 표시
 
-        _innerHolder.Clear();
-        //for(int i = 0; i < _itemList.Count; i++)
-        //    for(int j = 0; j < _itemList.Count - 1; ++j)
-        //        if (_itemList[j].Coins < _itemList[j + 1].Coins)
-        //        {
-        //            BoardItem temp = _itemList[j];
-        //            _itemList[j] = _itemList[j + 1];
-        //            _itemList[j + 1] = temp;
-        //        }
-
-        for (int i = 0; i < _itemList.Count; ++i)
-            _innerHolder.Add(_itemList[i].Root);
+            //자기꺼는 무조건 표시
+            if(item.ClientID == NetworkManager.Singleton.LocalClientId)
+            {
+                item.Show(true);
+            }
+        }
     }
 }
