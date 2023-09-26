@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Runtime.CompilerServices;
 using Unity.Netcode;
 using UnityEngine;
@@ -95,6 +96,7 @@ public class CoinSpawner : NetworkBehaviour
             ServerCountDownMessageClientRpc(i, pointIdx, coinCount);
             yield return new WaitForSeconds(1f);
         }
+        CloseServerCountDownMessageClientRPC();
 
         for(int i = 0; i < coinCount; i++)
         {
@@ -113,13 +115,15 @@ public class CoinSpawner : NetworkBehaviour
             yield return new WaitForSeconds(_spawningTerm); //term마다 한개씩
         }
         _isSpawning = false;
-        CloseDecalCircleClientRPC(); //닫힘
+        CloseDecalCircleClientRPC(pointIdx); //닫힘
+        
     }
 
     [ClientRpc]
-    private void CloseDecalCircleClientRPC()
+    private void CloseDecalCircleClientRPC(int pointIdx)
     {
         _decalCircle.CloseCircle();
+        spawnPointList[pointIdx].CloseMinimapIcon();
     }
 
     [ClientRpc]
@@ -130,7 +134,15 @@ public class CoinSpawner : NetworkBehaviour
         {
             _decalCircle.OpenCircle(point.Position, point.Radius);
         }
-        Debug.Log($"{point.pointName} 지점에서 {sec}초 후 {coinCount} 개의 코인이 생성됩니다.");
+        point.BlinkMinimapIcon();
+        UIManager.Instance.ShowMsg(true, 
+            $"{point.pointName} 지점에서 {sec}초 후 {coinCount} 개의 코인이 생성됩니다.");
+    }
+
+    [ClientRpc]
+    private void CloseServerCountDownMessageClientRPC()
+    {
+        UIManager.Instance.ShowMsg(false);
     }
     #endregion
 }

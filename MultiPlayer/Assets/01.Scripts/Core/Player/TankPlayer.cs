@@ -13,8 +13,11 @@ public class TankPlayer : NetworkBehaviour
     [field: SerializeField] public Health HealthCompo { get; private set; }
     [field: SerializeField] public CoinCollector Coin { get; private set; }
 
+    [SerializeField] private SpriteRenderer _minimapIcon;
+
     [Header("¼ÂÆÃ°ª")]
     [SerializeField] private int _ownerCamPriority;
+    [SerializeField] private Color _ownerColor;
 
     public NetworkVariable<FixedString32Bytes> playerName = new NetworkVariable<FixedString32Bytes>();
 
@@ -36,6 +39,8 @@ public class TankPlayer : NetworkBehaviour
         if(IsOwner)
         {
             _followCam.Priority = _ownerCamPriority;
+            _minimapIcon.color = _ownerColor;
+
         }
     }
 

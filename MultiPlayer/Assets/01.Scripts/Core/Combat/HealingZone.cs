@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class HealingZone : NetworkBehaviour
 {
     [Header("참조값")]
     [SerializeField] private Transform _healPowerBarTrm;
+    [SerializeField] private Transform _chargePowerBarTrm;
 
     [Header("셋팅값")]
     [SerializeField] private int _maxHealPower = 30;    // 회복시킬 수 있는 틱수
@@ -24,7 +26,55 @@ public class HealingZone : NetworkBehaviour
 
     private void Update()
     {
-        
+        if (!IsServer) return;
+
+        if (_remainCooldown > 0)
+        {
+            _remainCooldown -= Time.deltaTime;
+            ChargePowerClientRPC(1-(_remainCooldown / _cooldown));
+            if(_remainCooldown < 0)
+            {
+                ChargePowerClientRPC(0); // 나중에 코루틴 수정?
+                _healPower.Value = _maxHealPower;
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        // 여기 왔다라는 건 힐 파워가 있다.
+        _tickTimer += Time.deltaTime;
+        if(_tickTimer >= _healTickRate)
+        {
+            //아무튼 뭔가 힐이차는 무엇인가를 해주고
+            foreach(var player in _playersInZone)
+            {
+                if (player.HealthCompo.currentHealth.Value == 
+                    player.HealthCompo.MaxHealth)
+                    continue;
+                if (player.Coin.totalCoins.Value < _coinPerTick)
+                    continue;
+
+                player.Coin.SpendCoin(_coinPerTick);
+                player.HealthCompo.RestoreHealth(_healPerTick);
+                _healPower.Value -= 1;
+                if (_healPower.Value <= 0)
+                {
+                    _remainCooldown = _cooldown;
+                    break;
+                }
+            }
+
+
+            _tickTimer = _tickTimer % _healTickRate;
+        }
+    }
+
+    [ClientRpc]
+    public void ChargePowerClientRPC(float percent)
+    {
+        _chargePowerBarTrm.localScale = new Vector3(percent, 1, 1);
     }
 
     public override void OnNetworkSpawn()
@@ -60,10 +110,9 @@ public class HealingZone : NetworkBehaviour
         if (!IsServer) return;
 
         if (col.attachedRigidbody
-            .TryGetComponent<TankPlayer>(out TankPlayer temp))
+            .TryGetComponent<TankPlayer>(out TankPlayer player))
         {
-            _playersInZone.Add(temp);
-            Debug.Log($"{temp.name} 들어옴");
+            _playersInZone.Add(player);
         }
     }
 
@@ -72,10 +121,9 @@ public class HealingZone : NetworkBehaviour
         if (!IsServer) return;
 
         if (col.attachedRigidbody
-            .TryGetComponent<TankPlayer>(out TankPlayer temp))
+            .TryGetComponent<TankPlayer>(out TankPlayer player))
         {
-            _playersInZone.Remove(temp);
-            Debug.Log($"{temp.name} 나감");
+            _playersInZone.Remove(player);
         }
     }
 

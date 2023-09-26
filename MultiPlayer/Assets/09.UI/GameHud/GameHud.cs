@@ -16,6 +16,8 @@ public class GameHud : NetworkBehaviour
     private NetworkList<LeaderboardEntityState> _leaderBoardEntites; //리더보드 엔티티를 넣는곳
 
     private UIDocument _document;
+    private VisualElement _msgContainer;
+    private Label _msgLabel;
 
     private void Awake()
     {
@@ -29,6 +31,8 @@ public class GameHud : NetworkBehaviour
         var boardContainer = root.Q<VisualElement>("leaderboard");
         _leaderBoard = new LeaderBoard(boardContainer, _boardItemAsset, _ownerColor, 
                                         _displayCount);
+        _msgContainer = root.Q<VisualElement>("msg-container");
+        _msgLabel = root.Q<Label>("msg-label");
     }
 
     public override void OnNetworkSpawn()
@@ -154,5 +158,14 @@ public class GameHud : NetworkBehaviour
         _leaderBoard.SortOrder();
     }
 
-
+    public void ShowMsgContainer(bool show, string text = "")
+    {
+        if (show)
+        {
+            _msgContainer.RemoveFromClassList("off");
+            _msgLabel.text = text;
+        }
+        else
+            _msgContainer.AddToClassList("off");
+    }
 }
