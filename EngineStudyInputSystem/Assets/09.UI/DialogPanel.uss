@@ -1,0 +1,16 @@
+.bullet {
+    width: 20px;
+    height: 40px;
+    background-color: rgb(255, 107, 164);
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    margin-right: 20px;
+}
