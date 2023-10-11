@@ -14,3 +14,24 @@
     border-bottom-width: 2px;
     margin-right: 20px;
 }
+
+.bullet.off {
+    opacity: 0;
+}
+
+.panel {
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transition-property: scale;
+    transition-duration: 0.5s;
+    scale: 0 1;
+}
+
+.panel.on {
+    scale: 1 1;
+}
