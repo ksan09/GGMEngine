@@ -1,18 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 public class ClientSingleton : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public ClientGameManager GameManager { get; private set; }
+
+    private static ClientSingleton _instance;
+    public static ClientSingleton Instance
+    {
+        get
+        {
+            if (_instance != null) return _instance;
+
+            _instance = FindObjectOfType<ClientSingleton>();
+            if (_instance == null)
+                Debug.LogError("No client singleton");
+
+            return _instance;
+        }
+    }
+
+    public void CreateClient()
+    {
+        GameManager = new ClientGameManager(NetworkManager.Singleton);
+    }
+
+    private void OnDestroy()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Services.Core;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ApplicationController : MonoBehaviour
 {
@@ -44,12 +45,15 @@ public class ApplicationController : MonoBehaviour
         host.CreateHost(_playerPrefab);
         //클라이언트 크리에이트 해줘야 한다.
         ClientSingleton client = Instantiate(_clientPrefab, transform);
-
+        client.CreateClient(); //게임매니저를 만들어준다.
 
         //에드레서블 에셋 로드가 일어나야 한다.
 
 
         //메뉴씬으로 넘어간다.
+        SceneManager.LoadScene(SceneList.MenuScene);
+
+
     }
 
     private void HandleAuthMessage(string msg)

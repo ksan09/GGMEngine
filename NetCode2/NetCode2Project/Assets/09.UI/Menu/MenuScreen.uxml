@@ -1,0 +1,35 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/09.UI/common.uss?fileID=7433441132597879392&amp;guid=64c9e12a9ca6704418cc5d1dc7a90866&amp;type=3#common" />
+    <Style src="project://database/Assets/09.UI/Menu/MenuScreen.uss?fileID=7433441132597879392&amp;guid=c6f0c6d381db98c4fa7dd0ae41965d36&amp;type=3#MenuScreen" />
+    <ui:VisualElement name="container" class="container">
+        <ui:VisualElement name="screen-container" class="screen-container">
+            <ui:VisualElement name="content" class="content">
+                <ui:VisualElement name="page-one" class="page" style="background-color: rgb(255, 181, 174);">
+                    <ui:VisualElement name="create-lobby" style="width: 80%; background-color: rgb(255, 255, 255); border-top-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; border-bottom-left-radius: 15px; border-top-width: 3px; border-right-width: 3px; border-bottom-width: 3px; border-left-width: 3px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); padding-bottom: 40px; padding-top: 30px; padding-right: 25px; padding-left: 25px;">
+                        <ui:TextField picking-mode="Ignore" value="방 이름을 입력하세요" name="text-lobby-name" class="nps-font name-text" style="font-size: 45px;" />
+                        <ui:Button text="만들기" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-create" class="block-btn nps-font" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="page-two" class="page" style="background-color: rgb(167, 187, 255);" />
+                <ui:VisualElement name="page-three" class="page" style="background-color: rgb(182, 255, 177);" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="tab-container" class="tab-container">
+            <DataVisualElement name="button-one" class="tab-button">
+                <ui:VisualElement name="icon" picking-mode="Ignore" class="icon" style="background-image: url(&apos;project://database/Assets/04.Sprites/Icons/icon_37.png?fileID=21300000&amp;guid=dfdc0888f4c7afa428396da108a800e7&amp;type=3#icon_37&apos;);" />
+            </DataVisualElement>
+            <DataVisualElement name="button-one" panel-index="1" class="tab-button">
+                <ui:VisualElement name="icon" picking-mode="Ignore" class="icon" style="background-image: url(&apos;project://database/Assets/04.Sprites/Icons/icon_89.png?fileID=21300000&amp;guid=465460778f10fdf43ba5dad7559fd28e&amp;type=3#icon_89&apos;);" />
+            </DataVisualElement>
+            <DataVisualElement name="button-one" panel-index="2" class="tab-button">
+                <ui:VisualElement name="icon" picking-mode="Ignore" class="icon" style="background-image: url(&apos;project://database/Assets/04.Sprites/Icons/icon_93.png?fileID=21300000&amp;guid=21df40527646ac843a58aac9869fcb94&amp;type=3#icon_93&apos;);" />
+            </DataVisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="popup-panel" class="popup-panel off">
+            <ui:VisualElement name="inner-input" style="width: 80%; background-color: rgb(255, 255, 255); border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; padding-top: 15px; padding-bottom: 15px; padding-right: 25px; padding-left: 25px;">
+                <ui:TextField picking-mode="Ignore" value="이름을 입력하세요" name="name-text" class="nps-font name-text" style="font-size: 45px;" />
+                <ui:Button text="확인" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-ok" class="nps-font block-btn" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

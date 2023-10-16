@@ -393,7 +393,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 00000000efaff0600337ac5b2fcddaedaf07d29d
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -467,6 +467,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6dbc6eb7a1f5d44990b30722bf7d9dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _clientPrefab: {fileID: 4934969184753060832, guid: 80e74debfd5e4af4097d3b24b057157c, type: 3}
+  _hostPrefab: {fileID: 7299413749072350297, guid: ef7dccc59c3f72d4184faa47ab588f52, type: 3}
+  _playerPrefab: {fileID: 7434563087970222705, guid: 27f9f30a6125284499d2816f0f3d7724, type: 3}
 --- !u!4 &1749214864
 Transform:
   m_ObjectHideFlags: 0
