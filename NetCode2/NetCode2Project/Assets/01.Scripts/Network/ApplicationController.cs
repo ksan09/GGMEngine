@@ -39,11 +39,11 @@ public class ApplicationController : MonoBehaviour
             return;
         }
 
-        HostSingleton host = Instantiate(_hostPrefab, transform);
         //호스트 크리에이트 해줘야 한다.
+        HostSingleton host = Instantiate(_hostPrefab, transform);
         host.CreateHost(_playerPrefab);
-        ClientSingleton client = Instantiate(_clientPrefab, transform);
         //클라이언트 크리에이트 해줘야 한다.
+        ClientSingleton client = Instantiate(_clientPrefab, transform);
 
 
         //에드레서블 에셋 로드가 일어나야 한다.
