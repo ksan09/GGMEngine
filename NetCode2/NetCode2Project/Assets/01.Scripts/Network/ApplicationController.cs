@@ -1,8 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using Unity.Services.Core;
+using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -64,5 +68,44 @@ public class ApplicationController : MonoBehaviour
     private void OnDestroy()
     {
         AuthenticationWrapper.OnMessageEvent -= HandleAuthMessage;
+    }
+
+    public async Task<bool> StartHost(string username, string lobbyName)
+    {
+        var userData = new UserData
+        {
+            name = username,
+            userAuthID = AuthenticationService.Instance.PlayerId
+        };
+
+        return await HostSingleton.Instance
+            .GameManager.StartHostAsync(lobbyName, userData);
+    }
+
+    public async Task<List<Lobby>> GetLobbyList()
+    {
+        try
+        {
+            QueryLobbiesOptions options = new QueryLobbiesOptions();
+            options.Count = 20;
+
+            options.Filters = new List<QueryFilter>()
+            {
+                new QueryFilter(field: QueryFilter.FieldOptions.AvailableSlots,
+                op: QueryFilter.OpOptions.GT,
+                value: "0"),
+                new QueryFilter(field: QueryFilter.FieldOptions.IsLocked,
+                op: QueryFilter.OpOptions.EQ,
+                value: "0")
+            };
+
+            QueryResponse lobbies = await Lobbies.Instance
+                .QueryLobbiesAsync(options);
+            return lobbies.Results;
+        } catch(LobbyServiceException ex)
+        {
+            Debug.LogError(ex);
+            return new List<Lobby>();
+        }
     }
 }

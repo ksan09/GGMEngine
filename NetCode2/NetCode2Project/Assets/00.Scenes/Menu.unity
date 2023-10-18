@@ -184,6 +184,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09397397fa7e3254fbcd689ccd92c1b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _createPanelAsset: {fileID: 9197481963319205126, guid: 6b571f4b79ee49d4cb571c47623bc775, type: 3}
+  _lobbyPanelAsset: {fileID: 9197481963319205126, guid: 312f3e638188ffa40a99cf73047a1d28, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

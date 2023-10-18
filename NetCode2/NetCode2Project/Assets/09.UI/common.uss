@@ -5,4 +5,5 @@
     color: rgb(255, 255, 255);
     -unity-text-outline-width: 2px;
     -unity-text-outline-color: rgb(0, 0, 0);
+    -unity-font-definition: initial;
 }

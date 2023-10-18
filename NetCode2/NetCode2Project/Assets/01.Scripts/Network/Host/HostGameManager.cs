@@ -9,6 +9,8 @@ using Unity.Networking.Transport.Relay;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
+using Unity.Services.Lobbies.Models;
+using Unity.Services.Lobbies;
 
 public class HostGameManager : IDisposable
 {
@@ -45,6 +47,20 @@ public class HostGameManager : IDisposable
             transport.SetRelayServerData(relayServerData);
 
             // 여기에는 로비를 만드는 로직이 들어간다.
+            CreateLobbyOptions lobbyOptions = new CreateLobbyOptions();
+            lobbyOptions.Data = new Dictionary<string, DataObject>()
+            {
+                {
+                    "JoinCode", new DataObject(
+                        visibility: DataObject.VisibilityOptions.Member,
+                        value: _joinCode)
+                }
+            };
+            Lobby lobby = await Lobbies.Instance.CreateLobbyAsync(
+                lobbyName, _maxConnections, lobbyOptions);
+            _lobbyId = lobby.Id;
+            HostSingleton.Instance.StartCoroutine(HeartBeatLobby(15)); 
+            //로비에 심장박동 넣어주고
 
             // 여기에는 NetworkServer를 만드는 기능이 들어가야 돼.
             NetServer = new NetworkServer(NetworkManager.Singleton, _playerPrefab);
@@ -87,12 +103,36 @@ public class HostGameManager : IDisposable
     public async void ShutdownAsync()
     {
         //로비 정리 필요하고
+        if(!string.IsNullOrEmpty(_lobbyId))
+        {
+            if(HostSingleton.Instance != null)
+            {
+                HostSingleton.Instance.StopCoroutine(nameof(HeartBeatLobby));
+            }
 
+            try
+            {
+                await Lobbies.Instance.DeleteLobbyAsync(_lobbyId);
+            }catch(LobbyServiceException ex)
+            {
+                Debug.LogError(ex);
+            }
+        }
 
         NetServer.OnClientLeft -= HandleClientLeft;
         NetServer.OnClientJoin -= HandleClientJoin;
         _lobbyId = string.Empty;
         NetServer?.Dispose();
         
+    }
+
+    private IEnumerator HeartBeatLobby(float time)
+    {
+        var timer = new WaitForSecondsRealtime(time);
+        while(true)
+        {
+            Lobbies.Instance.SendHeartbeatPingAsync(_lobbyId);
+            yield return timer;
+        }
     }
 }
