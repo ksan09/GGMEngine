@@ -181,7 +181,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -417,8 +417,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 985893175
+  m_SortingOrder: 1000
   m_TargetDisplay: 0
 --- !u!224 &689245962
 RectTransform:
@@ -487,7 +487,7 @@ MonoBehaviour:
   _player: {fileID: 124615189}
   _mat: {fileID: 2100000, guid: 1cdb700bfe28b7d4baea48cedf7aa52d, type: 2}
   _resolution: {x: 1920, y: 1080, z: 0}
-  _circleSize: {x: 200, y: 200, z: 0}
+  _circleSize: {x: 300, y: 300, z: 0}
 --- !u!1 &1207560516
 GameObject:
   m_ObjectHideFlags: 0
@@ -777,5 +777,5 @@ SceneRoots:
   - {fileID: 327598678}
   - {fileID: 963293762}
   - {fileID: 1505524268}
-  - {fileID: 689245962}
   - {fileID: 124615189}
+  - {fileID: 689245962}

@@ -37,6 +37,7 @@ public class CutScene : MonoBehaviour
         Vector3 pos = Camera.main.WorldToScreenPoint(_player.position) - (_resolution * 0.5f);
         _mat.SetVector(circlePosVecName, pos);
 
+        StopAllCoroutines();
         StartCoroutine(CircleSizeChange(
             new Vector3(_resolution.x * 2, _resolution.x * 2), 
             _circleSize, 1f));
@@ -54,5 +55,33 @@ public class CutScene : MonoBehaviour
             currentTime += Time.deltaTime;
         }
         _mat.SetVector(circleSizeVecName, endSize);
+        currentTime = 0;
+        float delayTime = 0.8f;
+        yield return new WaitForSeconds(delayTime);
+        currentTime = 0;
+        float animationTime1 = 0.1f;
+        while (currentTime < animationTime1)
+        {
+            _mat.SetVector(circleSizeVecName,
+                Vector3.Lerp(endSize, 
+                endSize + Vector3.one * 20, 
+                currentTime / animationTime1));
+
+            yield return null;
+            currentTime += Time.deltaTime;
+        }
+        currentTime = 0;
+        float animationTime2 = 0.1f;
+        while (currentTime < animationTime2)
+        {
+            _mat.SetVector(circleSizeVecName,
+                Vector3.Lerp(endSize + Vector3.one * 20, 
+                Vector3.zero, 
+                currentTime / animationTime2));
+
+            yield return null;
+            currentTime += Time.deltaTime;
+        }
+        _mat.SetVector(circleSizeVecName, Vector3.zero);
     }
 }
