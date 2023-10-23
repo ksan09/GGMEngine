@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
+using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -16,9 +18,9 @@ public class MenuScreen : MonoBehaviour
     private UIDocument _uiDocument;
 
     private VisualElement _contentElem;
-    private const string _nameKey = "userName";
+    public const string nameKey = "userName";
 
-    private bool _isCreatingLobby = false; //로비가 생성중인가?
+    private bool _isWaiting = false; //로비가 생성중인가?
     private CreatePanel _createPanel;
     private LobbyPanel _lobbyPanel;
 
@@ -39,7 +41,7 @@ public class MenuScreen : MonoBehaviour
 
         var nameText = root.Q<TextField>("name-text");
         nameText.SetValueWithoutNotify(
-            PlayerPrefs.GetString(_nameKey, string.Empty));
+            PlayerPrefs.GetString(nameKey, string.Empty));
 
         root.Q<Button>("btn-ok")
             .RegisterCallback<ClickEvent>(e =>
@@ -48,7 +50,7 @@ public class MenuScreen : MonoBehaviour
                 if (string.IsNullOrEmpty(name))
                     return;
 
-                PlayerPrefs.SetString(_nameKey, name);
+                PlayerPrefs.SetString(nameKey, name);
                 root.Q<VisualElement>("popup-panel").AddToClassList("off");
             });
 
@@ -65,13 +67,14 @@ public class MenuScreen : MonoBehaviour
         lobbyPanel.AddToClassList("panel");
         root.Q<VisualElement>("page-two").Add(lobbyPanel);
         _lobbyPanel = new LobbyPanel(lobbyPanel, _lobbyTemplateAsset);
+        _lobbyPanel.JoinLobbyBtnEvent += HandleJoinToLobby;
         //
 
     }
 
     private async void HandleCreateLobby(string lobbyName)
     {
-        if (_isCreatingLobby)
+        if (_isWaiting)
             return;
 
         if(string.IsNullOrEmpty(lobbyName))
@@ -80,10 +83,10 @@ public class MenuScreen : MonoBehaviour
             return;
         }
 
-        string username = PlayerPrefs.GetString(_nameKey);
+        string username = PlayerPrefs.GetString(nameKey);
         //여기서는 스테이터스 텍스트에 로딩 텍스트가 나오게 만들어놓고 가면 된다.
 
-        _isCreatingLobby = true;
+        _isWaiting = true;
         LoadText(_createPanel.StatusLabel);
         bool result = await ApplicationController.Instance.StartHost(username, lobbyName);
         if (result)
@@ -96,7 +99,30 @@ public class MenuScreen : MonoBehaviour
             _createPanel.SetStatusText("로비 생성중 오류 발생");
         }
        
-        _isCreatingLobby = false;
+        _isWaiting = false;
+    }
+    private async void HandleJoinToLobby(Lobby lobby)
+    {
+        if (_isWaiting) return;
+        _isWaiting = true;
+
+        LoadText(_lobbyPanel.StatusLabel);
+        try
+        {
+            Lobby joiningLobby = await Lobbies.Instance.JoinLobbyByIdAsync(lobby.Id);
+            string joinCode = joiningLobby.Data["JoinCode"].Value;
+
+            await ApplicationController.Instance.
+                StartClientAsync(PlayerPrefs.GetString(MenuScreen.nameKey), joinCode);
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError(ex);
+        }
+        finally
+        {
+            _isWaiting = false;
+        }
     }
 
     private async void LoadText(Label targetLabel)
@@ -105,7 +131,7 @@ public class MenuScreen : MonoBehaviour
             "Loading..", "Loading...", "Loading...." };
 
         int idx = 0;
-        while(_isCreatingLobby)
+        while(_isWaiting)
         {
             targetLabel.text = makings[idx];
             idx = (idx + 1) % makings.Length;
@@ -121,10 +147,14 @@ public class MenuScreen : MonoBehaviour
             var percent = dve.panelIndex * -100;
 
             _contentElem.style.left = new Length(percent, LengthUnit.Percent);
+
+            //여기는 나중에 통합시킬 예정...
+            // 귀찮으면 패스
+            if(dve.panelIndex == 1)
+            {
+                _lobbyPanel.Refresh();
+            }
         }
     }
-
-
-
 
 }

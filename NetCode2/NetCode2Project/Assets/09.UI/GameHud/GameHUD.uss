@@ -1,0 +1,77 @@
+.container {
+    flex-grow: 1;
+}
+
+.waiting-panel {
+    flex-grow: 1;
+    background-color: rgba(197, 197, 197, 0.71);
+    align-items: center;
+    justify-content: center;
+}
+
+.waiting-box {
+    min-width: 80%;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    padding-right: 15px;
+    padding-left: 15px;
+    background-image: url('project://database/Assets/04.Sprites/Frame.png?fileID=21300000&guid=f3191ce532df45945bd3de2910ebb57c&type=3#Frame');
+    -unity-slice-left: 55;
+    -unity-slice-top: 55;
+    -unity-slice-right: 55;
+    -unity-slice-bottom: 55;
+    -unity-slice-scale: 0.3px;
+}
+
+.btn {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(79, 57, 37);
+    border-right-color: rgb(79, 57, 37);
+    border-top-color: rgb(79, 57, 37);
+    border-bottom-color: rgb(79, 57, 37);
+    background-color: rgb(255, 136, 30);
+    padding-top: 11px;
+    padding-right: 15px;
+    padding-bottom: 12px;
+    padding-left: 15px;
+}
+
+.player {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+
+.player > #sprite {
+    width: 64px;
+    height: 64px;
+    background-image: url('project://database/Assets/04.Sprites/Mushroom%20Head.png?fileID=21300000&guid=81192e82adab43a43b74055c595b95a2&type=3#Mushroom Head');
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 0, 0);
+}
+
+.player .check {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    left: 50%;
+    bottom: 15px;
+    translate: -50% 0;
+}
+
+.player.ready .check {
+    background-image: url('project://database/Assets/04.Sprites/Icons/133.png?fileID=21300000&guid=54dcb1099e200e740978ab6b2897c523&type=3#133');
+}
+
+.player-row {
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}

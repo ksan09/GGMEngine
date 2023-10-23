@@ -22,8 +22,8 @@ public class HostGameManager : IDisposable
 
     // string   = authId
     // ulong    = clientId
-    private event Action<string, ulong> OnPlayerConnect;
-    private event Action<string, ulong> OnPlayerDisconnect;
+    public event Action<string, ulong> OnPlayerConnect;
+    public event Action<string, ulong> OnPlayerDisconnect;
 
     private NetworkObject _playerPrefab;
     public HostGameManager(NetworkObject playerPrefab)

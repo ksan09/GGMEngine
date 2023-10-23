@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Services.Authentication;
+using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,9 +13,13 @@ public class LobbyPanel
 
     private VisualElement _root;
     private Label _statusLabel;
+    public Label StatusLabel => _statusLabel;
 
     private ScrollView _lobbyScrollView;
     private bool _isLobbyRefresh = false;
+
+    private bool _isJoining = false;
+    public event Action<Lobby> JoinLobbyBtnEvent;
 
     public LobbyPanel(VisualElement root, VisualTreeAsset lobbyAsset)
     {
@@ -29,14 +36,19 @@ public class LobbyPanel
 
     private async void HandleRefreshBtnClick(ClickEvent evt)
     {
-        if (_isLobbyRefresh) return;
+        Refresh();
+    }
 
+    public async void Refresh()
+    {
+        if (_isLobbyRefresh) return;
 
         _isLobbyRefresh = true;
         var list = await ApplicationController.Instance.GetLobbyList();
 
         //
-        foreach(var lobby in list)
+        _lobbyScrollView.Clear();
+        foreach (var lobby in list)
         {
             var lobbyTemplate = _lobbyAsset.Instantiate();
             _lobbyScrollView.Add(lobbyTemplate);
@@ -45,13 +57,8 @@ public class LobbyPanel
             lobbyTemplate.Q<Button>("btn-join")
                 .RegisterCallback<ClickEvent>(evt =>
                 {
-                    try
-                    {
-                        // 여기서 조인하는 거 넣자.
-                    } catch(Exception ex)
-                    {
-
-                    }
+                    JoinLobbyBtnEvent?.Invoke(lobby);
+                    //JoinToLobby(lobby);
                 });
         }
         //
