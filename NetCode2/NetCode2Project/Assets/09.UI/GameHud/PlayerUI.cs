@@ -9,7 +9,7 @@ public class PlayerUI
     private Label _nameLabel;
     private VisualElement _root;
 
-    public ulong clientID;
+    public ulong clientID = 999;
 
     public PlayerUI(VisualElement root)
     {
@@ -22,6 +22,7 @@ public class PlayerUI
     {
         clientID = data.clientID;
         _nameLabel.text = data.playerName.Value;
+        SetCheck(data.ready);
     }
 
     public void SetCheck(bool check)
@@ -46,5 +47,9 @@ public class PlayerUI
         _root.style.visibility = Visibility.Hidden;
     }
 
+    public void VisiblePlayerUI()
+    {
+        _root.style.visibility = Visibility.Visible;
+    }
 
 }

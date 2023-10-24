@@ -34,6 +34,7 @@ public class GameManager : NetworkBehaviour
     public GameRole myGameRole;
 
     private ushort _colorIdx = 0;
+    private int _readyUserCount = 0;
 
     private void Awake()
     {
@@ -97,6 +98,7 @@ public class GameManager : NetworkBehaviour
             try
             {
                 players.Remove(data);
+                --_colorIdx;
             }catch
             {
                 Debug.LogError($"{data.playerName} 삭제중 오류 발생");
@@ -105,5 +107,75 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    public void GameStart()
+    {
+        if (!IsHost) return;
+        if (_readyUserCount == 2 || true)
+        {
+            // 여기서 플레이어 턴 기반으로 돌리는 로직도 함께
+            SpawnPlayers();
+            StartGameClientRpc();
+        }
+        else
+        {
+            Debug.Log("아직 플레이어들이 준비되지 않았습니다.");
+        }
+    }
 
+    public void GameReady()
+    {
+        // 내 클라 아이디 레디 보내기
+        SendReadyStateServerRpc(NetworkManager.Singleton.LocalClientId);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SendReadyStateServerRpc(ulong clientID)
+    {
+        //이 클라이언트 아이디를 가진 플레이어를 찾아서
+        //레디 상태를 토글해주기
+        //그 값을 그냥 바꾸지 않고, 
+        //그것의 인덱스를 찾아서 거기다가 새로운 객체로 넣어주기 ( new GameData )
+        //Value Event를 위해
+
+        for (int i = 0; i < players.Count; ++i)
+        {
+            var oldData = players[i];
+            if (oldData.clientID != clientID) continue;
+
+            players[i] = new GameData
+            {
+                clientID = clientID,
+                playerName = oldData.playerName,
+                ready = !oldData.ready,
+                colorIdx = oldData.colorIdx,
+            };
+
+            _readyUserCount += players[i].ready ? 1 : -1;
+            break;
+        }
+    }
+
+    private void SpawnPlayers()
+    {
+        foreach(var player in players)
+        {
+            HostSingleton.Instance.GameManager.NetServer.SpawnPlayer(
+                player.clientID,
+                _spawnPosition.position,
+                player.colorIdx);
+        }
+    }
+
+    [ClientRpc]
+    private void StartGameClientRpc()
+    {
+        _gameState = GameState.Game;
+        GameStateChanged?.Invoke(_gameState);
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        players?.Dispose();
+    }
 }

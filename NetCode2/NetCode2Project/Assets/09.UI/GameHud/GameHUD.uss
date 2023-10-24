@@ -1,5 +1,6 @@
 .container {
     flex-grow: 1;
+    transition-duration: 0.3s;
 }
 
 .waiting-panel {
@@ -74,4 +75,9 @@
     justify-content: center;
     margin-bottom: 30px;
     margin-top: 20px;
+}
+
+.container.off {
+    opacity: 0;
+    visibility: hidden;
 }

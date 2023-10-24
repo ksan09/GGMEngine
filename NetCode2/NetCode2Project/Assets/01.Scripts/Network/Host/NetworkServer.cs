@@ -90,4 +90,15 @@ public class NetworkServer : IDisposable
         }
     }
 
+    public void SpawnPlayer(ulong clientID, Vector3 position, ushort colorIdx)
+    {
+        var player = GameObject.Instantiate(_playerPrefab, position, Quaternion.identity);
+        player.SpawnAsPlayerObject(clientID);
+
+        if(player.TryGetComponent<PlayerColorizer>(out PlayerColorizer playerColorizer))
+        {
+            playerColorizer.SetColor(colorIdx);
+        }
+    }
+
 }
