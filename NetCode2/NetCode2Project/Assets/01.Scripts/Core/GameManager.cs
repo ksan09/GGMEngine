@@ -36,10 +36,16 @@ public class GameManager : NetworkBehaviour
     private ushort _colorIdx = 0;
     private int _readyUserCount = 0;
 
+    public EggManager EggManager { get; private set; }
+    public TurnManager TurnManager { get; private set; }
+
     private void Awake()
     {
         Instance = this; // 굳은 믿음 ( 문제 안 발생할 거임 )
         players = new NetworkList<GameData>();
+
+        EggManager = GetComponent<EggManager>();
+        TurnManager = GetComponent<TurnManager>();
     }
 
     //스폰보다 먼저 실행될꺼다.
