@@ -38,6 +38,7 @@ public class GameManager : NetworkBehaviour
 
     public EggManager EggManager { get; private set; }
     public TurnManager TurnManager { get; private set; }
+    public ScoreManager ScoreManager { get; private set; }
 
     private void Awake()
     {
@@ -46,6 +47,7 @@ public class GameManager : NetworkBehaviour
 
         EggManager = GetComponent<EggManager>();
         TurnManager = GetComponent<TurnManager>();
+        ScoreManager = GetComponent<ScoreManager>();
     }
 
     //스폰보다 먼저 실행될꺼다.
@@ -183,5 +185,31 @@ public class GameManager : NetworkBehaviour
     {
         base.OnDestroy();
         players?.Dispose();
+    }
+
+    public void SendResultToClient(GameRole winner)
+    {
+        HostSingleton.Instance.GameManager.NetServer.DestroyAllPlayer();
+        ScoreManager.InitializeScore();
+        EggManager.DestroyEgg();
+        SendResultToClientRpc(winner);
+    }
+
+    [ClientRpc]
+    public void SendResultToClientRpc(GameRole winner)
+    {
+        if(winner == myGameRole)
+        {
+            _gameState = GameState.Win;
+            SignalHub.OnEndGame?.Invoke(true);
+        }
+        else
+        {
+            _gameState = GameState.Lose;
+            SignalHub.OnEndGame?.Invoke(false);
+        }
+
+        
+        GameStateChanged?.Invoke(_gameState);
     }
 }

@@ -25,6 +25,7 @@ public class TurnManager : NetworkBehaviour
     public void StartGame()
     {
         currentTurn.Value = GameRole.Host;
+        //SwitchTurn();
     }
 
     public override void OnNetworkSpawn()

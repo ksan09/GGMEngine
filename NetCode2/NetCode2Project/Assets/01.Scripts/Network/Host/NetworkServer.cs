@@ -13,10 +13,11 @@ public class NetworkServer : IDisposable
 
     // string   = authId
     // ulong    = clientId
-    private Dictionary<ulong, string> _clientToAuthDictinary = new ();
-    private Dictionary<string, UserData> _authIdToUserDataDictinary = new();
+    private Dictionary<ulong, string> _clientToAuthDictinary            = new();
+    private Dictionary<string, UserData> _authIdToUserDataDictinary     = new();
 
     private NetworkObject _playerPrefab;
+    private List<NetworkObject> _playerList                                = new();
 
     public NetworkServer(NetworkManager networkManager, NetworkObject playerPrefab)
     {
@@ -94,11 +95,23 @@ public class NetworkServer : IDisposable
     {
         var player = GameObject.Instantiate(_playerPrefab, position, Quaternion.identity);
         player.SpawnAsPlayerObject(clientID);
+        _playerList.Add(player);
 
         if(player.TryGetComponent<PlayerColorizer>(out PlayerColorizer playerColorizer))
         {
             playerColorizer.SetColor(colorIdx);
+
+            var controller = player.GetComponent<PlayerStateController>();
+            controller.InitStateClientRPC(clientID == NetworkManager.Singleton.LocalClientId);
         }
     }
 
+    public void DestroyAllPlayer()
+    {
+        foreach(var p in _playerList)
+        {
+            GameObject.Destroy(p.gameObject);
+        }
+        _playerList.Clear();
+    }
 }

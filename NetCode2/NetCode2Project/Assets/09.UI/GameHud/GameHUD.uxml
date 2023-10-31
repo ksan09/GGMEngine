@@ -1,6 +1,11 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/09.UI/common.uss?fileID=7433441132597879392&amp;guid=64c9e12a9ca6704418cc5d1dc7a90866&amp;type=3#common" />
     <Style src="project://database/Assets/09.UI/GameHud/GameHUD.uss?fileID=7433441132597879392&amp;guid=23bf23687ac02044593b8dd27878d81d&amp;type=3#GameHUD" />
+    <ui:VisualElement name="score-box" style="position: absolute; flex-direction: row; top: 20px; left: 50%; translate: -50% 0; align-items: center;">
+        <ui:Label tabindex="-1" text="00" parse-escape-sequences="true" display-tooltip-when-elided="true" name="host-score" class="nps-font" style="font-size: 70px; color: rgb(255, 253, 0);" />
+        <ui:Label tabindex="-1" text="-" parse-escape-sequences="true" display-tooltip-when-elided="true" name="hyphen" class="nps-font" style="margin-left: 25px; margin-right: 25px; font-size: 50px;" />
+        <ui:Label tabindex="-1" text="00" parse-escape-sequences="true" display-tooltip-when-elided="true" name="client-score" class="nps-font" style="font-size: 70px; color: rgb(228, 0, 255);" />
+    </ui:VisualElement>
     <ui:VisualElement name="container" class="container">
         <ui:VisualElement name="waiting-panel" class="waiting-panel">
             <ui:VisualElement name="waiting-box" class="waiting-box" style="padding-right: 25px; padding-left: 25px;">
@@ -24,6 +29,12 @@
                     <ui:Button text="준비완료" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-ready" class="btn nps-font" />
                 </ui:VisualElement>
             </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="result-box" class="result-box off">
+        <ui:VisualElement name="inner-box">
+            <ui:Label tabindex="-1" text="You Win&#10;" parse-escape-sequences="true" display-tooltip-when-elided="true" name="result-label" class="nps-font" style="font-size: 80px; -unity-text-align: upper-center;" />
+            <ui:Button text="Restart" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-restart" class="nps-font" style="font-size: 50px; padding-top: 20px; padding-bottom: 20px; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

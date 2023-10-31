@@ -9,14 +9,27 @@ public class ScoreManager : NetworkBehaviour
     public NetworkVariable<int> hostScore = new NetworkVariable<int>();
     public NetworkVariable<int> clientScore = new NetworkVariable<int>();
 
+    //
+    private void HandleScoreChanged(int oldScore, int newScore)
+    {
+        SignalHub.OnScoreChanged(hostScore.Value, clientScore.Value);
+    }
+    //
+
     public override void OnNetworkSpawn()
     {
+        hostScore.OnValueChanged      += HandleScoreChanged;
+        clientScore.OnValueChanged    += HandleScoreChanged;
+
         if(!IsServer) return;
         Egg.OnFallInWater += HandleFallWater;
     }
 
     public override void OnNetworkDespawn()
     {
+        hostScore.OnValueChanged    -= HandleScoreChanged;
+        clientScore.OnValueChanged  -= HandleScoreChanged;
+
         if(!IsServer) return;
         Egg.OnFallInWater -= HandleFallWater;
     }
@@ -38,13 +51,26 @@ public class ScoreManager : NetworkBehaviour
         CheckForEndGame();
     }
 
-    // 게임 끝났는지 체크
+    // 게임 끝났는지 체크 ( 이건 서버만 실행을 보장 )
     private void CheckForEndGame()
     {
         //3점 내기
         // hostScore >= 3, GameManager RPC call host's win
         // clientScore >= 3, GameManager RPC call client's win
-        GameManager.Instance.EggManager.ResetEgg();
+        if (hostScore.Value >= 3)
+        {
+            GameManager.Instance.SendResultToClient(GameRole.Host);
+        }
+        else if(clientScore.Value >= 3)
+        {
+            GameManager.Instance.SendResultToClient(GameRole.Client);
+        }
+        else
+        {
+            GameManager.Instance.EggManager.ResetEgg();
+        }
+        
+        
     }
 
     private void Start()
@@ -52,7 +78,7 @@ public class ScoreManager : NetworkBehaviour
         InitializeScore();
     }
 
-    private void InitializeScore()
+    public void InitializeScore()
     {
         hostScore.Value = 0;
         clientScore.Value = 0;

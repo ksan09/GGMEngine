@@ -47,11 +47,15 @@ public class EggManager : NetworkBehaviour
 
         _eggInstance = Instantiate(_eggPrefab, _eggStartPosition.position, Quaternion.identity);
         _eggInstance.NetworkObject.Spawn();
-
     }
 
     public void ResetEgg()
     {
         _eggInstance.ResetToStartPosition(_eggStartPosition.position);
+    }
+
+    public void DestroyEgg()
+    {
+        Destroy(_eggInstance.gameObject);
     }
 }

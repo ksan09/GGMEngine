@@ -25,6 +25,7 @@ public class PlayerStateController : NetworkBehaviour
                 myRole.Value = GameRole.Client;
             }
         }
+
     }
 
     public override void OnNetworkDespawn()
@@ -55,5 +56,9 @@ public class PlayerStateController : NetworkBehaviour
         _spriteRenderer.color = color;
     }
 
-
+    [ClientRpc]
+    public void InitStateClientRPC(bool value)
+    {
+        EnablePlayer(value);
+    }
 }
