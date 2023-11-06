@@ -12,12 +12,18 @@ public class GameHud : NetworkBehaviour
     [SerializeField] private VisualTreeAsset _boardItemAsset;
     [SerializeField] private int _displayCount = 7;
 
+    [SerializeField] private InputReader _inputReader;
+
     private LeaderBoard _leaderBoard;
     private NetworkList<LeaderboardEntityState> _leaderBoardEntites; //리더보드 엔티티를 넣는곳
 
     private UIDocument _document;
     private VisualElement _msgContainer;
     private Label _msgLabel;
+
+    private bool _isEscMenuOpen = false;
+    private VisualElement _popupElement;
+
 
     private void Awake()
     {
@@ -33,6 +39,51 @@ public class GameHud : NetworkBehaviour
                                         _displayCount);
         _msgContainer = root.Q<VisualElement>("msg-container");
         _msgLabel = root.Q<Label>("msg-label");
+
+        _popupElement = root.Q<VisualElement>("popup");
+        _popupElement.Q<Button>("btn-exit").RegisterCallback<ClickEvent>(OnExitToMenuHandle);
+        _popupElement.Q<Button>("btn-close").RegisterCallback<ClickEvent>(OnCloseMenuHandle);
+
+        _inputReader.PressMenuEvent += OnHandleEscMenu;
+    }
+
+    private void OnDisable()
+    {
+        _inputReader.PressMenuEvent -= OnHandleEscMenu;
+    }
+
+    private void OnHandleEscMenu()
+    {
+        if(!_isEscMenuOpen)
+        {
+            _popupElement.RemoveFromClassList("off");
+            _inputReader.SetPlayerInputStatus(false);
+
+        }
+        else
+        {
+            _popupElement.AddToClassList("off");
+            _inputReader.SetPlayerInputStatus(true);
+        }
+        _isEscMenuOpen = !_isEscMenuOpen;
+    }
+
+    private void OnCloseMenuHandle(ClickEvent evt)
+    {
+        OnHandleEscMenu();
+    }
+
+    private void OnExitToMenuHandle(ClickEvent evt)
+    {
+        _inputReader.SetPlayerInputStatus(true);
+
+        if(NetworkManager.Singleton.IsHost)
+        {
+            HostSingletone.Instance.GameManager.ShutdownAsync();
+        }
+
+        ClientSingletone.Instance.GameManager.Disconnect();
+
     }
 
     public override void OnNetworkSpawn()

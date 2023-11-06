@@ -23,7 +23,15 @@ public class HostGameManager : IDisposable
     private Allocation _allocation;
 
     public NetworkServer NetworkServer { get; private set; }
-    public async void Shutdown()
+
+    private NetworkObject _playerPrefab;
+
+    public HostGameManager(NetworkObject playerPrefab)
+    {
+        _playerPrefab = playerPrefab;
+    }
+
+    public async void ShutdownAsync()
     {
         HostSingletone.Instance.StopCoroutine(nameof(HeartBeatLobby));
         if(!string.IsNullOrEmpty(_lobbyId))
@@ -38,13 +46,14 @@ public class HostGameManager : IDisposable
             }
         }
 
+        NetworkServer.OnClientLeft -= HandleClientLeft;
         _lobbyId = String.Empty;
         NetworkServer?.Dispose();
     }
 
     public void Dispose()
     {
-        Shutdown();
+        ShutdownAsync();
     }
 
     public async Task StartHostAsync()
@@ -104,7 +113,7 @@ public class HostGameManager : IDisposable
             return;
         }
 
-        NetworkServer = new NetworkServer(NetworkManager.Singleton);
+        NetworkServer = new NetworkServer(NetworkManager.Singleton, _playerPrefab);
 
         UserData userData = new UserData
         {
@@ -114,8 +123,20 @@ public class HostGameManager : IDisposable
         NetworkManager.Singleton.NetworkConfig.ConnectionData = userData.Serialize().ToArray();
 
         NetworkManager.Singleton.StartHost();
+        NetworkServer.OnClientLeft += HandleClientLeft;
         NetworkManager.Singleton.SceneManager
             .LoadScene(GameSceneName, LoadSceneMode.Single);
+    }
+
+    private async void HandleClientLeft(string authID)
+    {
+        try
+        {
+            await LobbyService.Instance.RemovePlayerAsync(_lobbyId, authID);
+        } catch(LobbyServiceException ex)
+        {
+            Debug.LogError(ex);
+        }
     }
 
     IEnumerator HeartBeatLobby(int sec)

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.Netcode;
 using UnityEngine;
 
 public class ApplicationControleer : MonoBehaviour
@@ -10,6 +11,9 @@ public class ApplicationControleer : MonoBehaviour
     private ClientSingletone _clientPrefab;
     [SerializeField]
     private HostSingletone _hostPrefab;
+
+    [SerializeField]
+    private NetworkObject _playerPrefab;
 
     private async void Start()
     {
@@ -31,7 +35,7 @@ public class ApplicationControleer : MonoBehaviour
         {
             // 우리는 여기만 일단 만들꺼다
             HostSingletone hostSingletone = Instantiate(_hostPrefab);
-            hostSingletone.CreateHost(); // 게임매니저 만들고 준비
+            hostSingletone.CreateHost(_playerPrefab); // 게임매니저 만들고 준비
 
             ClientSingletone clientSingletone = Instantiate(_clientPrefab);
             bool authenticated = await clientSingletone.CreateClient();

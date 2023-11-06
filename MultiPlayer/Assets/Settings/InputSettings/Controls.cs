@@ -189,6 +189,34 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""UI"",
+            ""id"": ""a528fb9a-519d-413c-9ae7-47190f62afdb"",
+            ""actions"": [
+                {
+                    ""name"": ""OpenUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd256f19-ac85-4cdc-a04c-65c950e1aa03"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""0ca445a6-cee1-4053-b6f7-35f21fdf7e2f"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""OpenUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -215,6 +243,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
+        // UI
+        m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
+        m_UI_OpenUI = m_UI.FindAction("OpenUI", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -334,6 +365,52 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // UI
+    private readonly InputActionMap m_UI;
+    private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
+    private readonly InputAction m_UI_OpenUI;
+    public struct UIActions
+    {
+        private @Controls m_Wrapper;
+        public UIActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @OpenUI => m_Wrapper.m_UI_OpenUI;
+        public InputActionMap Get() { return m_Wrapper.m_UI; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(UIActions set) { return set.Get(); }
+        public void AddCallbacks(IUIActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIActionsCallbackInterfaces.Add(instance);
+            @OpenUI.started += instance.OnOpenUI;
+            @OpenUI.performed += instance.OnOpenUI;
+            @OpenUI.canceled += instance.OnOpenUI;
+        }
+
+        private void UnregisterCallbacks(IUIActions instance)
+        {
+            @OpenUI.started -= instance.OnOpenUI;
+            @OpenUI.performed -= instance.OnOpenUI;
+            @OpenUI.canceled -= instance.OnOpenUI;
+        }
+
+        public void RemoveCallbacks(IUIActions instance)
+        {
+            if (m_Wrapper.m_UIActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IUIActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public UIActions @UI => new UIActions(this);
     private int m_KeyboardAndMouseSchemeIndex = -1;
     public InputControlScheme KeyboardAndMouseScheme
     {
@@ -348,5 +425,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+    }
+    public interface IUIActions
+    {
+        void OnOpenUI(InputAction.CallbackContext context);
     }
 }

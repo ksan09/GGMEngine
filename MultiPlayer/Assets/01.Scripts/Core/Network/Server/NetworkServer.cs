@@ -7,15 +7,20 @@ using UnityEngine;
 public class NetworkServer : IDisposable
 {
     private NetworkManager _networkManager;
+    public Action<string> OnClientLeft;
+
     private Dictionary<ulong, string> _clientToAuthDictinary = new Dictionary<ulong, string>();
     private Dictionary<string, UserData> _authToUserDataDictinary = new Dictionary<string, UserData>();
 
-    public NetworkServer(NetworkManager networkManager)
+    private NetworkObject _playerPrefab;
+
+    public NetworkServer(NetworkManager networkManager, NetworkObject playerPrefab)
     {
         _networkManager = networkManager;
         _networkManager.ConnectionApprovalCallback += ApprovalCheck;
 
         _networkManager.OnServerStarted += OnNetworkReady;
+        _playerPrefab = playerPrefab;
     }
 
     private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest req,
@@ -28,10 +33,28 @@ public class NetworkServer : IDisposable
         _authToUserDataDictinary[data.userAuthId] = data;
 
         res.Approved = true;
-        res.Position = TankSpawnPoint.GerRandomSpawnPos();
-        res.Rotation = Quaternion.identity;
-        //이나블 모든 위치중 랜덤 위치
-        res.CreatePlayerObject = true;
+        
+        //res.Position = TankSpawnPoint.GerRandomSpawnPos();
+        //res.Rotation = Quaternion.identity;
+        ////이나블 모든 위치중 랜덤 위치
+        //res.CreatePlayerObject = true;
+    }
+
+    //이녀석을 만들기 위한 정보를 줘야 한다.
+    public void SpawnPlayer(ulong clientID, UserListEntityState userState)
+    {
+        NetworkObject player = GameObject.Instantiate(_playerPrefab, 
+            TankSpawnPoint.GerRandomSpawnPos(), Quaternion.identity);
+
+        //해당 플레이어 오브젝트 clientID에게 오너로 할당
+        player.SpawnAsPlayerObject(clientID);
+
+        TankPlayer tankComponent = player.GetComponent<TankPlayer>();
+
+        tankComponent.SetTankNetworkVariable(userState);
+        //해당 플레이어에 선택한 값들을 적용시킨다.
+
+
     }
 
     private void OnNetworkReady()
@@ -45,6 +68,8 @@ public class NetworkServer : IDisposable
         {
             _clientToAuthDictinary.Remove(clientId);
             _authToUserDataDictinary.Remove(authID);
+
+            OnClientLeft?.Invoke(authID);
         }
     }
 

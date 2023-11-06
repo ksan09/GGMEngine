@@ -1824,6 +1824,7 @@ MonoBehaviour:
   _ownerColor: {r: 0.40943396, g: 0.64886934, b: 1, a: 1}
   _boardItemAsset: {fileID: 9197481963319205126, guid: 61a8b4c17fcd325489c84ee6dd32d3ba, type: 3}
   _displayCount: 7
+  _inputReader: {fileID: 11400000, guid: 9c869e5bd16743e49a11271d57d160a7, type: 2}
 --- !u!114 &1072292312
 MonoBehaviour:
   m_ObjectHideFlags: 0

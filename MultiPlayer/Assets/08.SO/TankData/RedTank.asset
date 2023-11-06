@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c81a3b0b2dee0247afb06e54fbd7ee9, type: 3}
+  m_Name: RedTank
+  m_EditorClassIdentifier: 
+  tankID: 4
+  tankName: Red Bull
+  basicTurretSO: {fileID: 11400000, guid: 1894a9d22952d5a4cab752f3bacc0602, type: 2}
+  basicTurretSprite: {fileID: 21300000, guid: 428e148c02619744989de8eb1b6f2c34, type: 3}
+  bodySprite: {fileID: 21300000, guid: b1b1b6fed0487a8448a7208173dbada0, type: 3}
+  moveSpeed: 8
+  rotateSpeed: 120
+  maxHP: 60

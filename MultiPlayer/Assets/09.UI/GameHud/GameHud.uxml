@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Template name="LeaderBoard" src="project://database/Assets/09.UI/GameHud/LeaderBoard/LeaderBoard.uxml?fileID=9197481963319205126&amp;guid=d38e93cc1cdcdb644a5b1a0d376d7721&amp;type=3#LeaderBoard" />
     <Style src="project://database/Assets/09.UI/GameHud/GameHud.uss?fileID=7433441132597879392&amp;guid=77b630d523c5074438d49546403d1353&amp;type=3#GameHud" />
+    <Style src="project://database/Assets/09.UI/Common.uss?fileID=7433441132597879392&amp;guid=6b7ae2eb940829047903a0b0488257b8&amp;type=3#Common" />
     <ui:VisualElement name="container">
         <ui:VisualElement name="leaderboard-container" style="flex-grow: 1;">
             <ui:Instance template="LeaderBoard" name="LeaderBoard" />
@@ -11,6 +12,13 @@
         </ui:VisualElement>
         <ui:VisualElement name="msg-container" class="off" style="flex-grow: 1;">
             <ui:Label tabindex="-1" text="북쪽 10초 후 코인 생성합니다." parse-escape-sequences="true" display-tooltip-when-elided="true" name="msg-label" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="popup" class="popup off">
+        <ui:VisualElement name="inner-popup" class="inner-popup">
+            <ui:Label tabindex="-1" text="Game Menu" parse-escape-sequences="true" display-tooltip-when-elided="true" name="title-label" style="-unity-text-align: upper-center; font-size: 25px; -unity-font-style: bold;" />
+            <ui:Button text="Exit to main menu" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-exit" class="btn" />
+            <ui:Button text="Close menu" parse-escape-sequences="true" display-tooltip-when-elided="true" name="btn-close" class="btn" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

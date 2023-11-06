@@ -6,10 +6,13 @@ using UnityEngine.InputSystem;
 using static Controls;
 
 [CreateAssetMenu(menuName ="SO/Input/Reader", fileName = "New Input reader")]
-public class InputReader : ScriptableObject, IPlayerActions
+public class InputReader : ScriptableObject, IPlayerActions, IUIActions
 {
     public event Action<bool> PrimaryFireEvent;
     public event Action<Vector2> MovementEvent;
+
+    public event Action PressMenuEvent;
+
     public Vector2 AimPosition { get; private set; }
     private Controls _controlAction;
 
@@ -20,8 +23,10 @@ public class InputReader : ScriptableObject, IPlayerActions
         {
             _controlAction = new Controls();
             _controlAction.Player.SetCallbacks(this);
+            _controlAction.UI.SetCallbacks(this);
         }
         _controlAction.Player.Enable();
+        _controlAction.UI.Enable();
     }
 
     public void OnMovement(InputAction.CallbackContext context)
@@ -45,5 +50,25 @@ public class InputReader : ScriptableObject, IPlayerActions
     public void OnAim(InputAction.CallbackContext context)
     {
         AimPosition = context.ReadValue<Vector2>();
+    }
+
+    public void OnOpenUI(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            PressMenuEvent?.Invoke();
+        }
+    }
+
+    public void SetPlayerInputStatus(bool value)
+    {
+        if(value)
+        {
+            _controlAction.Player.Enable();
+        }
+        else
+        {
+            _controlAction.Player.Disable();
+        }
     }
 }

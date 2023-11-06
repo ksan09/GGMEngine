@@ -9,17 +9,24 @@ public class PlayerMovement : NetworkBehaviour
     [Header("참조데이터")]
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private Transform _bodyTrm;
+    [SerializeField] private ParticleSystem _dustCloudEffect;
     private Rigidbody2D _rigidbody;
 
     [Header("셋팅값들")]
     [SerializeField] private float _movementSpeed = 4f;
     [SerializeField] private float _turningRate = 30f;
+    [SerializeField] private float _dustParticleEmisionValue = 10;
+
+    private ParticleSystem.EmissionModule _emissionModule;
+    private const float particleStopThreshold = 0.005f;
 
     private Vector2 _prevMovementInput;
+    private Vector3 _prevPosition;
 
     private void Awake()
     {
-        _rigidbody = GetComponent<Rigidbody2D>();  
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _emissionModule = _dustCloudEffect.emission;
     }
 
     public override void OnNetworkSpawn()
@@ -59,6 +66,16 @@ public class PlayerMovement : NetworkBehaviour
         //오너인지 검사해서
         // 리지드바디의 속도에다가 바디의 up방향으로 y값을 적용해서 movementSpeed만큼 이동시켜주면 된다.
         if (!IsOwner) return; //오너가 아니면 리턴
+
+        if ((transform.position - _prevPosition).sqrMagnitude > particleStopThreshold)
+        {
+            _emissionModule.rateOverTime = _dustParticleEmisionValue;
+        }
+        else
+        {
+            _emissionModule.rateOverTime = 0;
+        }
+        _prevPosition = transform.position;
 
         _rigidbody.velocity = _bodyTrm.up * (_prevMovementInput.y * _movementSpeed);
 

@@ -9,11 +9,16 @@ using UnityEngine;
 public class TankPlayer : NetworkBehaviour
 {
     [Header("참조변수")]
+    [SerializeField] private SpriteRenderer _minimapIcon;
     [SerializeField] private CinemachineVirtualCamera _followCam;
+    [SerializeField] private PlayerMovement _movement;
+    [SerializeField] private ProjectileLauncher _launcher;
+    [SerializeField] private SpriteRenderer _bodySprite;
+    [SerializeField] private SpriteRenderer _turretSprite;
+
     [field: SerializeField] public Health HealthCompo { get; private set; }
     [field: SerializeField] public CoinCollector Coin { get; private set; }
 
-    [SerializeField] private SpriteRenderer _minimapIcon;
 
     [Header("셋팅값")]
     [SerializeField] private int _ownerCamPriority;
@@ -50,5 +55,12 @@ public class TankPlayer : NetworkBehaviour
         {
             OnPlayerDespawned?.Invoke(this);
         }
+    }
+
+    public void SetTankNetworkVariable(UserListEntityState userState)
+    {
+        // 탱크 아이디를 기반으로 해당 탱크의 정보를 불러와주고
+        // 이동에다가 이동, 로테이트 설정
+        // 런쳐에다가 데미지 설정
     }
 }
