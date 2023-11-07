@@ -128,11 +128,11 @@ public class HostGameManager : IDisposable
             .LoadScene(GameSceneName, LoadSceneMode.Single);
     }
 
-    private async void HandleClientLeft(string authID)
+    private async void HandleClientLeft(UserData userData, ulong clientID)
     {
         try
         {
-            await LobbyService.Instance.RemovePlayerAsync(_lobbyId, authID);
+            await LobbyService.Instance.RemovePlayerAsync(_lobbyId, userData.userAuthId);
         } catch(LobbyServiceException ex)
         {
             Debug.LogError(ex);

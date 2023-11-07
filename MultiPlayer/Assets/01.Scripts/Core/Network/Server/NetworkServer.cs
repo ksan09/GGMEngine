@@ -7,7 +7,8 @@ using UnityEngine;
 public class NetworkServer : IDisposable
 {
     private NetworkManager _networkManager;
-    public Action<string> OnClientLeft;
+    public Action<UserData, ulong> OnClientLeft;
+    public Action<UserData, ulong> OnClientJoin;
 
     private Dictionary<ulong, string> _clientToAuthDictinary = new Dictionary<ulong, string>();
     private Dictionary<string, UserData> _authToUserDataDictinary = new Dictionary<string, UserData>();
@@ -31,6 +32,8 @@ public class NetworkServer : IDisposable
 
         _clientToAuthDictinary[req.ClientNetworkId] = data.userAuthId;
         _authToUserDataDictinary[data.userAuthId] = data;
+
+        OnClientJoin?.Invoke(data, req.ClientNetworkId);
 
         res.Approved = true;
         
@@ -66,10 +69,11 @@ public class NetworkServer : IDisposable
     {
         if(_clientToAuthDictinary.TryGetValue(clientId, out string authID))
         {
+            UserData userData = _authToUserDataDictinary[authID];
             _clientToAuthDictinary.Remove(clientId);
             _authToUserDataDictinary.Remove(authID);
 
-            OnClientLeft?.Invoke(authID);
+            OnClientLeft?.Invoke(userData, clientId);
         }
     }
 
