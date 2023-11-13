@@ -9,7 +9,6 @@ public class ProjectileLauncher : NetworkBehaviour
 {
     [Header("참조 변수들")]
     [SerializeField] private InputReader _inputReader;
-    [SerializeField] private Transform _projectileSpawnTrm;
     [SerializeField] private GameObject _serverProjectilePrefab;
     [SerializeField] private GameObject _clientProjectilePrefab;
     [SerializeField] private Collider2D _playerCollider;
@@ -20,6 +19,8 @@ public class ProjectileLauncher : NetworkBehaviour
 
     private bool _shouldFire;
     private float _prevFireTime;
+    private NetworkVariable<int> _damage = new NetworkVariable<int>(10);
+    private List<Transform> _firePosTrm = new List<Transform>();
 
     public UnityEvent OnFire;
 
@@ -47,8 +48,11 @@ public class ProjectileLauncher : NetworkBehaviour
 
         if (Time.time < _prevFireTime + _fireCooltime) return; //쿨타임이 아직 남아있다.
 
-        PrimaryFireServerRPC(_projectileSpawnTrm.position, _projectileSpawnTrm.up);
-        SpawnDummyProjectile(_projectileSpawnTrm.position, _projectileSpawnTrm.up);
+        foreach(var trm in _firePosTrm)
+        {
+            PrimaryFireServerRPC(trm.position, trm.up);
+            SpawnDummyProjectile(trm.position, trm.up);
+        }
         _prevFireTime = Time.time;
     }
 
@@ -61,6 +65,12 @@ public class ProjectileLauncher : NetworkBehaviour
         if (instance.TryGetComponent<Rigidbody2D>(out Rigidbody2D rigidbody))
         {
             rigidbody.velocity = rigidbody.transform.up * _projectileSpeed;
+        }
+
+        if (instance.TryGetComponent<DealDamageOnContact>(out DealDamageOnContact dealContact))
+        {
+            dealContact.SetDamage(_damage.Value);
+            dealContact.SetOwner(OwnerClientId);
         }
 
         SpawnDummyProjectileClientRPC(position, dir);
@@ -86,5 +96,28 @@ public class ProjectileLauncher : NetworkBehaviour
         {
             rigidbody.velocity = rigidbody.transform.up * _projectileSpeed;
         }
+    }
+
+    public void SetDamage(int damage)
+    {
+        _damage.Value = damage;
+    }
+
+    public void SetFirePosition(Vector3[] firePos)
+    {
+        //터렛의 TurretPivot의 Turret을 찾아와서
+        //FirePos의 위치에다가 새로운 게임 오브젝트를 만들어서
+        //아까 찾은 Turret에 자식으로 걔를 붙여주면 된다.
+        //자식으로 붙여준 게임오브젝트의 transform을 _firePosTrm 리스트에 딸깍 넣어주면 완성된다.
+        Transform parent = transform.Find("TurretPivot/Turret");
+        foreach(var offset in firePos)
+        {
+            GameObject firePoint = new GameObject();
+            firePoint.transform.SetParent(parent);
+            firePoint.transform.localPosition = offset;
+
+            _firePosTrm.Add(firePoint.transform);
+        }
+        
     }
 }

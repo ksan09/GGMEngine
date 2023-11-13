@@ -13,8 +13,8 @@ public class PlayerMovement : NetworkBehaviour
     private Rigidbody2D _rigidbody;
 
     [Header("셋팅값들")]
-    [SerializeField] private float _movementSpeed = 4f;
-    [SerializeField] private float _turningRate = 30f;
+    [SerializeField] private NetworkVariable<float> _movementSpeed  = new NetworkVariable<float>(4f);
+    [SerializeField] private NetworkVariable<float> _turningRate    = new NetworkVariable<float>(30f);
     [SerializeField] private float _dustParticleEmisionValue = 10;
 
     private ParticleSystem.EmissionModule _emissionModule;
@@ -55,7 +55,7 @@ public class PlayerMovement : NetworkBehaviour
         // 바디 트랜스폼을 회전시켜주면 된다.
         if (!IsOwner) return;
 
-        float zRotation = _prevMovementInput.x * -_turningRate * Time.deltaTime;
+        float zRotation = _prevMovementInput.x * -_turningRate.Value * Time.deltaTime;
         _bodyTrm.Rotate(0, 0, zRotation);
 
     }
@@ -77,7 +77,13 @@ public class PlayerMovement : NetworkBehaviour
         }
         _prevPosition = transform.position;
 
-        _rigidbody.velocity = _bodyTrm.up * (_prevMovementInput.y * _movementSpeed);
+        _rigidbody.velocity = _bodyTrm.up * (_prevMovementInput.y * _movementSpeed.Value);
 
+    }
+
+    public void SetTankMovement(float moveSpeed, float rotateSpeed)
+    {
+        _movementSpeed.Value = moveSpeed;
+        _turningRate.Value = rotateSpeed;
     }
 }

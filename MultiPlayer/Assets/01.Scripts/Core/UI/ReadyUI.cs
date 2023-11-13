@@ -58,7 +58,10 @@ public class ReadyUI : MonoBehaviour
         _startBtn = root.Q<Button>("btn-start");
 
         // 여기에 각각 버튼을 클릭했을 때의 동작이 들어가야 한다.
-        _readyBtn.RegisterCallback<ClickEvent>(HandleReady);
+        _readyBtn.RegisterCallback<ClickEvent>(HandleReadyClick);
+        _startBtn.RegisterCallback<ClickEvent>(HandleGameStart);
+
+        _startBtn.SetEnabled(false);
     }
 
     private void HandleTankClick(ClickEvent evt)
@@ -82,10 +85,14 @@ public class ReadyUI : MonoBehaviour
             TankSelect?.Invoke(tankData.tankID);
         }
     }
-    private void HandleReady(ClickEvent evt)
+    private void HandleReadyClick(ClickEvent evt)
     {
         _isReady = !_isReady;
         ReadyChanged?.Invoke(_isReady);
+    }
+    private void HandleGameStart(ClickEvent evt)
+    {
+        GameStarted?.Invoke();
     }
 
     public void SetTankTemplate(List<TankDataSO> list)
@@ -140,5 +147,23 @@ public class ReadyUI : MonoBehaviour
         userUI.SetReady(userData.ready);
 
 
+    }
+
+    public void SetHost(bool isHost)
+    {
+        if(!isHost)
+        {
+            _startBtn.style.visibility = Visibility.Hidden;
+        }
+    }
+
+    public void ReadyToStart(bool value)
+    {
+        _startBtn.SetEnabled(value); // 모두 준비가 완료되었다면 startBtn이 활성화된다.
+    }
+
+    public void HideFromScreen()
+    {
+        _uiDocument.enabled = false;
     }
 }

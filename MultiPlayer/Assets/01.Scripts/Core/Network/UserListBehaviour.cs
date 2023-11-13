@@ -9,6 +9,8 @@ public class UserListBehaviour : NetworkBehaviour
     [SerializeField] private ReadyUI _readyUI;
     [SerializeField] private List<TankDataSO> _tankDatas;
 
+    [SerializeField] private CoinSpawner _coinSpawner;
+
     public static UserListBehaviour Instance;
     public NetworkList<UserListEntityState> _userList = new NetworkList<UserListEntityState>();
 
@@ -130,7 +132,37 @@ public class UserListBehaviour : NetworkBehaviour
 
     private void HandleGameStarted()
     {
-        
+        for(int i = 0; i < _userList.Count; ++i)
+        {
+            var user = _userList[i];
+            TankDataSO tankData = GetTankDataSO(user.tankID);
+
+            user.combatData = new TankCombatData
+            {
+                moveSpeed = tankData.moveSpeed,
+                damage = tankData.basicTurretSO.damage,
+                rotateSpeed = tankData.rotateSpeed,
+                maxHP = tankData.maxHP,
+            };
+
+            // 여기서 탱크를 스폰하도록 코드를 작성한다.
+            HostSingletone.Instance.GameManager.NetworkServer.SpawnPlayer(user.clientID, user);
+        }
+
+        GameStartClientRpc();
+        // 여기서 코인 스포닝 시작
+        _coinSpawner.StartSpawn();
+    }
+
+    public TankDataSO GetTankDataSO(int tankID)
+    {
+        return _tankDatas.Find(x => x.tankID == tankID);
+    }
+
+    [ClientRpc]
+    private void GameStartClientRpc()
+    {
+        _readyUI.HideFromScreen();
     }
 
     private void HandleTankSelected(int tankID)
@@ -142,7 +174,7 @@ public class UserListBehaviour : NetworkBehaviour
 
     private void HandleReadyChanged(bool value)
     {
-        ReadyTankServerRpc(value, NetworkManager.Singleton.LocalClientId);
+        SetReadyServerRpc(value, NetworkManager.Singleton.LocalClientId);
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -163,7 +195,7 @@ public class UserListBehaviour : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ReadyTankServerRpc(bool ready, ulong clientID)
+    private void SetReadyServerRpc(bool ready, ulong clientID)
     {
         int idx = FindIndex(clientID);
 
@@ -177,6 +209,23 @@ public class UserListBehaviour : NetworkBehaviour
             combatData = oldUser.combatData,
             ready = ready
         };
+
+        _readyUI.ReadyToStart(CheckAllReady());
+    }
+
+    private bool CheckAllReady()
+    {
+        bool result = true;
+        foreach(var user in _userList)
+        {
+            if(!user.ready)
+            {
+                result = false;
+                break;
+            }
+        }
+
+        return result;
     }
 
     private void HandleUserListChanged(NetworkListEvent<UserListEntityState> evt)
@@ -197,5 +246,8 @@ public class UserListBehaviour : NetworkBehaviour
         }
     }
 
-
+    public UserListEntityState GetUserEntity(ulong clientID)
+    {
+        return _userList[FindIndex(clientID)];
+    }
 }

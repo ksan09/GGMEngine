@@ -55,8 +55,10 @@ public class NetworkServer : IDisposable
         TankPlayer tankComponent = player.GetComponent<TankPlayer>();
 
         tankComponent.SetTankNetworkVariable(userState);
-        //해당 플레이어에 선택한 값들을 적용시킨다.
+        //탱크에 공유되어야 하는 네트워크값을 셋팅
 
+        //해당 플레이어에 선택한 값들을 적용시킨다.
+        tankComponent.SetTankVisualClientRPC(clientID);
 
     }
 

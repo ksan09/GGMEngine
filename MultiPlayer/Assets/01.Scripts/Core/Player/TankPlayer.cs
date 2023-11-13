@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class TankPlayer : NetworkBehaviour
 {
@@ -57,10 +58,29 @@ public class TankPlayer : NetworkBehaviour
         }
     }
 
+    // 이건 서버만 호출하는 메서드야.
     public void SetTankNetworkVariable(UserListEntityState userState)
     {
         // 탱크 아이디를 기반으로 해당 탱크의 정보를 불러와주고
-        // 이동에다가 이동, 로테이트 설정
+        var tankData = UserListBehaviour.Instance.GetTankDataSO(userState.tankID);
+        // 이동에다가 이동 스프라이트와, 로테이트 설정
+        _movement.SetTankMovement(userState.combatData.moveSpeed, userState.combatData.rotateSpeed);
         // 런쳐에다가 데미지 설정
+        _launcher.SetDamage(tankData.basicTurretSO.damage);
+    }
+
+    [ClientRpc]
+    public void SetTankVisualClientRPC(ulong clientID)
+    {
+        var user = UserListBehaviour.Instance.GetUserEntity(clientID);
+        var tankData = UserListBehaviour.Instance.GetTankDataSO(user.tankID);
+
+        // -- make --
+        // body sprite
+        _bodySprite.sprite = tankData.bodySprite;
+        // turret sprite
+        _turretSprite.sprite = tankData.basicTurretSprite;
+        // turret luncher firepos
+        _launcher.SetFirePosition(tankData.basicTurretSO.firePos);
     }
 }
