@@ -4026,7 +4026,7 @@ CompositeCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 540822094}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -5892,6 +5892,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1985588596}
+  - component: {fileID: 1985588597}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -5920,6 +5921,23 @@ Transform:
   - {fileID: 1432907578}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1985588597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1985588595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9451fa69fd61d1499370f19c0b600ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tilemap: {fileID: 2049408934}
+  _whatIsObstacle:
+    serializedVersion: 2
+    m_Bits: 256
+  _safeZoneMap: {fileID: 540822097}
 --- !u!4 &1995952903 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 731269567493136348, guid: 5234725c5866b054a90f19793df996d6, type: 3}
@@ -6103,7 +6121,6 @@ GameObject:
   - component: {fileID: 2049408937}
   - component: {fileID: 2049408936}
   - component: {fileID: 2049408935}
-  - component: {fileID: 2049408938}
   m_Layer: 8
   m_Name: WallTiles
   m_TagString: Untagged
@@ -15329,23 +15346,6 @@ TilemapCollider2D:
   m_MaximumTileChangeCount: 1000
   m_ExtrusionFactor: 0
   m_UseDelaunayMesh: 0
---- !u!114 &2049408938
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2049408931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9451fa69fd61d1499370f19c0b600ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _tilemap: {fileID: 2049408934}
-  _whatIsObstacle:
-    serializedVersion: 2
-    m_Bits: 256
-  _safeZoneMap: {fileID: 540822097}
 --- !u!1 &2120895068
 GameObject:
   m_ObjectHideFlags: 0

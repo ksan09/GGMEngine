@@ -62,8 +62,12 @@ public class Health : NetworkBehaviour
         }
     }
 
+    //
     public void TakeDamage(int damage)
     {
+        if (MapManager.Instance.InSafeZone(transform.position))
+            return;
+
         ModifyHealth(-damage);
     }
 
@@ -83,4 +87,9 @@ public class Health : NetworkBehaviour
         }
     }
 
+    public void SetMaxHealth(int maxHealth)
+    {
+        MaxHealth = maxHealth;
+        currentHealth.Value = maxHealth;
+    }
 }

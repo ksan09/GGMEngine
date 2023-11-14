@@ -62,11 +62,13 @@ public class TankPlayer : NetworkBehaviour
     public void SetTankNetworkVariable(UserListEntityState userState)
     {
         // 탱크 아이디를 기반으로 해당 탱크의 정보를 불러와주고
-        var tankData = UserListBehaviour.Instance.GetTankDataSO(userState.tankID);
+        TankDataSO tankData = UserListBehaviour.Instance.GetTankDataSO(userState.tankID);
         // 이동에다가 이동 스프라이트와, 로테이트 설정
         _movement.SetTankMovement(userState.combatData.moveSpeed, userState.combatData.rotateSpeed);
         // 런쳐에다가 데미지 설정
         _launcher.SetDamage(tankData.basicTurretSO.damage);
+        // 체력 설정
+        HealthCompo.SetMaxHealth(tankData.maxHP);
     }
 
     [ClientRpc]

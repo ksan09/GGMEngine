@@ -46,6 +46,9 @@ public class ProjectileLauncher : NetworkBehaviour
         if (!IsOwner) return;
         if (!_shouldFire) return;
 
+        if (MapManager.Instance.InSafeZone(transform.position))
+            return;
+
         if (Time.time < _prevFireTime + _fireCooltime) return; //쿨타임이 아직 남아있다.
 
         foreach(var trm in _firePosTrm)

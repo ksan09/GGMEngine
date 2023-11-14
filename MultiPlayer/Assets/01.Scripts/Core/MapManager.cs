@@ -12,7 +12,7 @@ public class MapManager : MonoBehaviour
         {
             if(_instance == null)
             {
-                _instance = GameObject.Find("WallTiles").GetComponent<MapManager>();
+                _instance = GameObject.Find("Level").GetComponent<MapManager>();
                 if(_instance == null)
                 {
                     Debug.LogError("There are no tilemap");
