@@ -51,6 +51,23 @@ public class NetworkServer : IDisposable
 
     private void HandleClientConnect(ulong clientID)
     {
+        //Player Prefab 생성 후 알맞게 오너쉽 설정
+        NetworkObject player = GameObject.Instantiate(_playerPrefab, Vector3.zero, Quaternion.identity);
+        player.SpawnAsPlayerObject(clientID);
+
+        var userData = _clientIdToUserDataDictionary[clientID];
+
+        if (player.TryGetComponent<Player>(out Player playerTemp))
+        {
+            playerTemp.SetUserName(userData.username);
+            Debug.Log($"Create {userData.username} complete!");
+        }
+        else
+        {
+            Debug.LogError($"Create {userData.username} failed!");
+        }
+
+
         
     }
 

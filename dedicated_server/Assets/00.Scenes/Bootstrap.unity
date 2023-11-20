@@ -200,7 +200,8 @@ MonoBehaviour:
     NetworkTransport: {fileID: 34982404}
     PlayerPrefab: {fileID: 0}
     Prefabs:
-      NetworkPrefabsLists: []
+      NetworkPrefabsLists:
+      - {fileID: 11400000, guid: b06e7eef38575c34bb15fe6acdd29670, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 1
@@ -263,7 +264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b17c55729ca34144b14306a838f8890, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerPrefab: {fileID: 0}
+  _playerPrefab: {fileID: 7882741116081084144, guid: 733b97f1b0ab59c4caf8d7bfb1dfe0f9, type: 3}
   _serverPrefab: {fileID: 625520993881018241, guid: 6ca8c1dc103abdb478fc17b085690e5b, type: 3}
   _clientPrefab: {fileID: 7560306035563123084, guid: cbefd66ae7a2eca40922124127fee346, type: 3}
   _ipAddress: 127.0.0.1
