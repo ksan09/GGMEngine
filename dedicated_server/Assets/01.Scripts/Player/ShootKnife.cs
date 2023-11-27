@@ -88,8 +88,6 @@ public class ShootKnife : NetworkBehaviour
 
         if(instance.TryGetComponent<DealDamageOnContact>(out DealDamageOnContact damage))
         {
-            Debug.Log(_knifeDamage);
-
             damage.SetDamage(_knifeDamage);
             damage.SetOwner(OwnerClientId);
         }

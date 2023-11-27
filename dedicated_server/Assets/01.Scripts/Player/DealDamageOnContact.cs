@@ -23,11 +23,11 @@ public class DealDamageOnContact : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log(1);
+        if (col.attachedRigidbody == null) return;
 
         if(col.attachedRigidbody.TryGetComponent<Health>(out Health health))
         {
-            health.TakeDamage(_damage);
+            health.TakeDamage(_damage, _ownerClientID);
         }
     }
 }

@@ -15,6 +15,9 @@ public class NetworkServer : IDisposable
 {
     public delegate void UserChanged(ulong clientID, UserData userData);
 
+    public event UserChanged OnUserJoin;
+    public event UserChanged OnUserLeft;
+
     private NetworkObject _playerPrefab;
     private NetworkManager _networkManager;
 
@@ -51,7 +54,28 @@ public class NetworkServer : IDisposable
 
     private void HandleClientConnect(ulong clientID)
     {
-        //Player Prefab 생성 후 알맞게 오너쉽 설정
+
+        RespawnPlayer(clientID);
+        if (_clientIdToUserDataDictionary.TryGetValue(clientID, out var userData))
+        {
+            OnUserJoin?.Invoke(clientID, userData);
+        }
+        
+    }
+
+    private void HandleClientDisconnect(ulong clientID)
+    {
+        if(_clientIdToUserDataDictionary.TryGetValue(clientID, out var userData))
+        {
+            _clientIdToUserDataDictionary.Remove(clientID);
+            OnUserLeft?.Invoke(clientID, userData);
+        }
+    }
+
+    public void RespawnPlayer(ulong clientID)
+    {
+        // 위쪽 플레이어 스폰 코드를 잘 참조해서 리스폰 해주기
+        // 기본 리스폰은 vector3.zero
         NetworkObject player = GameObject.Instantiate(_playerPrefab, Vector3.zero, Quaternion.identity);
         player.SpawnAsPlayerObject(clientID);
 
@@ -66,14 +90,6 @@ public class NetworkServer : IDisposable
         {
             Debug.LogError($"Create {userData.username} failed!");
         }
-
-
-        
-    }
-
-    private void HandleClientDisconnect(ulong clientID)
-    {
-        
     }
 
     public bool OpenConnection(string ipAddress, ushort port)

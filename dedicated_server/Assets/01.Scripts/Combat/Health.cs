@@ -13,13 +13,28 @@ public class Health : NetworkBehaviour
     public Action<Health> OnDie;
     public UnityEvent<int, int, float> OnHealthChanged;
 
+    public ulong LastHitDealerID { get; private set; }
+
     // 구독 처리
     // currentHealth에 대해서 서버와 클라가 다르게 해야함
-
-    private void Awake()
+    public override void OnNetworkSpawn()
     {
+        if(IsClient)
+        {
+            currentHealth.OnValueChanged += HandleChangeHealth;
+            HandleChangeHealth(0, maxHealth);
+        }
+
+        if (!IsServer) return;
         currentHealth.Value = maxHealth;
-        currentHealth.OnValueChanged += HandleChangeHealth;
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        if (IsClient)
+        {
+            currentHealth.OnValueChanged -= HandleChangeHealth;
+        }
     }
 
     private void HandleChangeHealth(int prev, int newValue)
@@ -28,8 +43,9 @@ public class Health : NetworkBehaviour
         OnHealthChanged?.Invoke(prev, newValue, (float)newValue / maxHealth);
     }
 
-    public void TakeDamage(int damageValue)
+    public void TakeDamage(int damageValue, ulong dealerID)
     {
+        LastHitDealerID = dealerID;
         ModifyHealth(-damageValue);
     }
 
@@ -42,8 +58,12 @@ public class Health : NetworkBehaviour
     {
         if (_isDead) return;
 
-        currentHealth.Value = currentHealth.Value + value;
-        if (currentHealth.Value <= 0)
+        currentHealth.Value = Mathf.Clamp(currentHealth.Value + value, 0, maxHealth);
+
+        if (currentHealth.Value == 0)
+        {
+            OnDie?.Invoke(this);
             _isDead = true;
+        }
     }
 }
