@@ -40,7 +40,8 @@ public class NetworkServer : IDisposable
 
         _clientIdToUserDataDictionary[req.ClientNetworkId] = userData;
 
-        res.Approved = true;
+        //4¸í±îÁö
+        res.Approved = (_clientIdToUserDataDictionary.Count <= 4);
         res.CreatePlayerObject = false;
 
         Debug.Log($"{userData.username} [ {req.ClientNetworkId} ] is logined!");

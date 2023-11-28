@@ -66,10 +66,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "0. \u3141\u3141"
+  m_text: 1. User
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 7b0d0e27a8f36e3408513bbb2cf87243, type: 2}
-  m_sharedMaterial: {fileID: -3991004484880342972, guid: 7b0d0e27a8f36e3408513bbb2cf87243, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3b9c50f5f8a4fa8499cd9bdcd412d6fa, type: 2}
+  m_sharedMaterial: {fileID: -5862265317036854286, guid: 3b9c50f5f8a4fa8499cd9bdcd412d6fa, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,8 +93,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26
-  m_fontSizeBase: 26
+  m_fontSize: 48
+  m_fontSizeBase: 48
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: -70.24042, z: 0, w: 86.396484}
+  m_margin: {x: 0, y: -70.24042, z: -14.113892, w: 86.396484}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

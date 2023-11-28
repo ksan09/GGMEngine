@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4381283133597990116, guid: dde8c9074ee51e043aa5b1e6a969f114, type: 3}
+      propertyPath: m_Radius
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 6780745296759224584, guid: dde8c9074ee51e043aa5b1e6a969f114, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -106,7 +110,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 2194eb26e5b94334d81434736bbe7ad9, type: 3}
+  m_Sprite: {fileID: 504885984, guid: 01bdc289dfeab3f4da4086c495930151, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

@@ -21,6 +21,8 @@ public class RespawnManager : NetworkBehaviour
         Player.OnPlayerDespawned -= HandlePlayerDespawn;
     }
 
+
+
     private void HandlePlayerDespawn(Player player)
     {
         //
@@ -31,9 +33,9 @@ public class RespawnManager : NetworkBehaviour
         if(pData != null)
         {
             Debug.Log($"{pData.username} is dead by {data.username}[{lastHitDealerID}]");
+            StartCoroutine(DelayRespawn(player.OwnerClientId));
         }
         
-        StartCoroutine(DelayRespawn(player.OwnerClientId));
     }
 
     IEnumerator DelayRespawn(ulong clientID)

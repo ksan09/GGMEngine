@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class InputReader : ScriptableObject, Controls.IPlayerActions 
 {
     public event Action<Vector2> MovementEvent;
+    public event Action JumpEvent;
     public event Action ShootEvent;
     public Vector2 AimPosition { get; private set; }
     private Controls _controls;
@@ -37,6 +38,14 @@ public class InputReader : ScriptableObject, Controls.IPlayerActions
         if (context.performed)
         {
             ShootEvent?.Invoke();
+        }
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            JumpEvent?.Invoke();
         }
     }
 }

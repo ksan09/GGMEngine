@@ -8,6 +8,7 @@ public class PlayerMovement : NetworkBehaviour
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private float _movementSpeed;
+    [SerializeField] private float _jumpPower;
 
     [SerializeField] private PlayerAnimation _playerAnimation;
 
@@ -24,6 +25,13 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
 
         _inputReader.MovementEvent += HandleMovement;
+        _inputReader.JumpEvent += HandleJump;
+    }
+
+    private void HandleJump()
+    {
+        if (!IsOwner) return;
+        _rigidbody2D.AddForce(Vector2.up * _jumpPower, ForceMode2D.Impulse);
     }
 
     private void HandleMovement(Vector2 movement)
@@ -39,7 +47,9 @@ public class PlayerMovement : NetworkBehaviour
 
         if (!IsOwner) return;
 
-        _rigidbody2D.velocity = _movementInput * _movementSpeed;
+        Vector2 velo = _rigidbody2D.velocity;
+        velo.x = _movementInput.x * _movementSpeed;
+        _rigidbody2D.velocity = velo;
 
     }
 
@@ -48,5 +58,6 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
 
         _inputReader.MovementEvent -= HandleMovement;
+        _inputReader.JumpEvent += HandleJump;
     }
 }
