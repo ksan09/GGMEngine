@@ -15,6 +15,10 @@ public class PlayerMovement : NetworkBehaviour
     private Vector2 _movementInput;
     private Rigidbody2D _rigidbody2D;
 
+    [SerializeField] private Transform _groundCheckRayPos;
+    [SerializeField] private Vector2 _rayDist;
+    [SerializeField] private LayerMask _groundLayer;
+
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -31,6 +35,7 @@ public class PlayerMovement : NetworkBehaviour
     private void HandleJump()
     {
         if (!IsOwner) return;
+        if (GroundCheck() == false) return;
         _rigidbody2D.AddForce(Vector2.up * _jumpPower, ForceMode2D.Impulse);
     }
 
@@ -42,10 +47,10 @@ public class PlayerMovement : NetworkBehaviour
 
     private void FixedUpdate()
     {
+        if (!IsOwner) return;
+
         _playerAnimation.SetMove(_rigidbody2D.velocity.magnitude > 0.1f);
         _playerAnimation.FlipController( _rigidbody2D.velocity.x);
-
-        if (!IsOwner) return;
 
         Vector2 velo = _rigidbody2D.velocity;
         velo.x = _movementInput.x * _movementSpeed;
@@ -58,6 +63,19 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
 
         _inputReader.MovementEvent -= HandleMovement;
-        _inputReader.JumpEvent += HandleJump;
+        _inputReader.JumpEvent -= HandleJump;
     }
+
+    private bool GroundCheck()
+    {
+        return Physics2D.Raycast(_groundCheckRayPos.position, _rayDist.normalized, Mathf.Abs(_rayDist.y), _groundLayer).collider;
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(_groundCheckRayPos.position, _groundCheckRayPos.position + (Vector3)_rayDist);
+    }
+#endif
 }

@@ -2,10 +2,26 @@ using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
 using System;
-using UnityEngine.SocialPlatforms.Impl;
+using UnityEditor.Rendering.Universal;
 
 public class RankingboardBehaviour : NetworkBehaviour
 {
+    private static RankingboardBehaviour _instance;
+    public static RankingboardBehaviour Instance
+    {
+        get
+        {
+            if (_instance != null) return _instance;
+            _instance = FindObjectOfType<RankingboardBehaviour>();
+
+            if (_instance == null)
+            {
+                Debug.LogError("Server singleton does not exists");
+            }
+            return _instance;
+        }
+    }
+
     [SerializeField] private RecordUI _recordPrefab;
     [SerializeField] private RectTransform _recordParentTrm;
 
@@ -125,7 +141,26 @@ public class RankingboardBehaviour : NetworkBehaviour
     private void AdjustScoreToUIList(RankingboardEntityState value)
     {
         //값을 받아서 해당 UI를 찾아서 ( 올바른 클라이언트 ID ) score를 갱신한다.
+        var target = _rankUIList.Find(x => x.clientID == value.clientID);
+        if (target == null)
+        {
+            Debug.LogError("Error adjust score to list");
+        }
+        else
+        {
+            target.SetText(1, value.playerName.ToString(), value.score);
+        }
+
+        _rankUIList.Sort((a, b) => { return a.Compare(a, b); });
+        for(int i = 0; i < _rankUIList.Count; ++i)
+        {
+            _rankUIList[i].transform.SetParent(null);
+            _rankUIList[i].transform.SetParent(_recordParentTrm);
+            _rankUIList[i].SetText(i + 1, _rankUIList[i].username, _rankUIList[i].score);
+        }
+        //target.SetText(0, value.playerName.ToString(), value.score);
         //선택 : 갱신 후에는 UI List를 정렬하고, 정렬된 순서에 맞춰서 실제 UI의 순서도 변경한다.
+        
     }
 
     private void AddUIToList(RankingboardEntityState value)
@@ -146,6 +181,24 @@ public class RankingboardBehaviour : NetworkBehaviour
         {
             _rankUIList.Remove(target);
             Destroy(target.gameObject);
+        }
+    }
+
+    public void KillPoint(ulong clientID)
+    {
+        for (int i = 0; i < _rankList.Count; ++i)
+        {
+            if (_rankList[i].clientID != clientID) continue;
+
+            var oldItem = _rankList[i];
+            _rankList[i] = new RankingboardEntityState
+            {
+                clientID = clientID,
+                playerName = oldItem.playerName,
+                score = oldItem.score + 10
+            };
+
+            break;
         }
     }
 

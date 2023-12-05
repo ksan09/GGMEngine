@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class KnifeBase : MonoBehaviour
 {
+    [SerializeField] private LayerMask _enterLayer;
     [SerializeField] private float _lifeTime = 2;
     private float _currentLifeTime;
 
@@ -16,7 +17,8 @@ public class KnifeBase : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(gameObject);
+        if(collision.gameObject.layer == _enterLayer)
+            Destroy(gameObject);
     }
 
 

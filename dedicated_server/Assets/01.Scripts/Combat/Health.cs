@@ -10,6 +10,7 @@ public class Health : NetworkBehaviour
 
     private bool _isDead = false;
 
+    public Action<Health> OnScoreUpdate;
     public Action<Health> OnDie;
     public UnityEvent<int, int, float> OnHealthChanged;
 
@@ -62,8 +63,18 @@ public class Health : NetworkBehaviour
 
         if (currentHealth.Value == 0)
         {
+            LastHitDealerServerRPC(LastHitDealerID);
+            OnScoreUpdate(this);
             OnDie?.Invoke(this);
             _isDead = true;
+
+
         }
+    }
+
+    [ServerRpc]
+    public void LastHitDealerServerRPC(ulong dealerID)
+    {
+        LastHitDealerID = dealerID;
     }
 }

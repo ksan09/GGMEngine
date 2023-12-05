@@ -85,7 +85,18 @@ public class NetworkServer : IDisposable
         if (player.TryGetComponent<Player>(out Player playerTemp))
         {
             playerTemp.SetUserName(userData.username);
+            
+        }
+        else
+        {
+            Debug.LogError($"Create {userData.username} failed!");
+        }
+
+        if (player.TryGetComponent<Health>(out Health playerHealth))
+        {
+            playerHealth.OnScoreUpdate += HandleDie;
             Debug.Log($"Create {userData.username} complete!");
+            Debug.Log($"OnDie += HandleDie");
         }
         else
         {
@@ -108,6 +119,12 @@ public class NetworkServer : IDisposable
         }
 
         return null;
+    }
+
+    private void HandleDie(Health health)
+    {
+        health.OnScoreUpdate -= HandleDie;
+        RankingboardBehaviour.Instance.KillPoint(health.LastHitDealerID);
     }
 
     public void Dispose()
