@@ -20,6 +20,8 @@ public class Player : Entity
 
     public PlayerStat PlayerStat { get; private set; }
 
+    [HideInInspector] public SkillManager Skill { get; private set; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -42,6 +44,7 @@ public class Player : Entity
     private void Start()
     {
         StateMachine.Initalize(PlayerStateEnum.Idle, this);
+        Skill = SkillManager.Instance;
     }
 
     protected override void Update()
@@ -68,7 +71,10 @@ public class Player : Entity
 
     private void HandleDashEvent()
     {
-        StateMachine.ChangeState(PlayerStateEnum.Dash);
+        if(Skill.GetSkill<DashSkill>().AtemptUseSkill())
+        {
+            StateMachine.ChangeState(PlayerStateEnum.Dash);
+        }
     }
 
     #endregion

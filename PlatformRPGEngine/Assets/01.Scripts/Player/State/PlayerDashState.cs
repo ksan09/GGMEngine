@@ -22,10 +22,12 @@ public class PlayerDashState : PlayerState
             _dashDirection = _player.FacingDirection;
 
         _dashStartTime = Time.time;
+        _player.Skill.GetSkill<CloneSkill>().CreateCloneOnDashStart();
     }
 
     public override void Exit()
     {
+        _player.Skill.GetSkill<CloneSkill>().CreateCloneOnDashEnd();
         base.Exit();
     }
 

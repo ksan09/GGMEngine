@@ -11,7 +11,7 @@ public class PlayerAnimationTriggers : MonoBehaviour
         _player = transform.parent.GetComponent<Player>();
     }
 
-    private void AnimationEndTrigget()
+    private void AnimationEndTrigger()
     {
         _player.AnimationEndTrigger();
     }
