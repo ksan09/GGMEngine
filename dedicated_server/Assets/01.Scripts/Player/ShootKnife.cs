@@ -12,6 +12,7 @@ public class ShootKnife : NetworkBehaviour
     [SerializeField] private GameObject _clientKnifePrefab;
     // 자기 자신과 충돌방지를 위한 플레이어 콜라이더도 필요하다
     [SerializeField] private Collider2D _playerCollider;
+    [SerializeField] private Collider2D _itemCollectCollider;
 
     [Header("셋팅값들")]
     [SerializeField] private float  _knifeSpeed;
@@ -19,6 +20,9 @@ public class ShootKnife : NetworkBehaviour
 
     [SerializeField] private float  _throwCooltime;
     private float _lastThrowTime;
+
+    private int _damageUp = 0;
+    private float _scaleUp = 0;
 
     // 자기 자신만 inputReader에서 ShootEvent를 구독해야한다.
     // 해지도 잘 해야된다
@@ -46,39 +50,41 @@ public class ShootKnife : NetworkBehaviour
 
         //쿨타임이 돌아왔다면 발사 하는거야
         //클라꺼 쏘고
-        ShotKnife(_clientKnifePrefab);
+        ShotKnife(_clientKnifePrefab, _damageUp, _scaleUp);
         //서버 RPC날리고
         //서버 RPC는 클라 RPC날리고
         //자기자신은 안만들어주고 나머지 클라는 만든다.
-        SpawnKnifeServerRPC();
+        SpawnKnifeServerRPC(_damageUp, _scaleUp);
         //모든 나이프는 만들때 
         //Physics2D.IgnoreCollision 을 이용해서 자기자신과는 충돌하지 않게 만든다.
     }
 
     [ServerRpc]
-    public void SpawnKnifeServerRPC()
+    public void SpawnKnifeServerRPC(int damageUp, float scaleUp)
     {
         //
         UserData data = ServerSingleton.Instance.NetServer.GetUserDataByClientID(OwnerClientId);
-        ShotKnife(_serverKnifePrefab);
-        SpawnDummyKnifeClientRPC();
+        ShotKnife(_serverKnifePrefab, damageUp, scaleUp);
+        SpawnDummyKnifeClientRPC(damageUp, scaleUp);
     }
 
     [ClientRpc]
-    public void SpawnDummyKnifeClientRPC()
+    public void SpawnDummyKnifeClientRPC(int damageUp, float scaleUp)
     {
         if (IsOwner) return;
-        ShotKnife(_clientKnifePrefab);
+        ShotKnife(_clientKnifePrefab, damageUp, scaleUp);
     }
 
-    private void ShotKnife(GameObject obj)
+    private void ShotKnife(GameObject obj, int damageUp, float scaleUp)
     {
         GameObject instance = Instantiate(obj, _shootPositionTrm.position, Quaternion.identity);
         instance.transform.right = _shootPositionTrm.right;
+        instance.transform.localScale = Vector3.one + Vector3.one * scaleUp;
 
         if(instance.TryGetComponent<Collider2D>(out Collider2D col))
         {
             Physics2D.IgnoreCollision(col, _playerCollider);
+            Physics2D.IgnoreCollision(col, _itemCollectCollider);
         }
 
         if(instance.TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
@@ -88,9 +94,16 @@ public class ShootKnife : NetworkBehaviour
 
         if(instance.TryGetComponent<DealDamageOnContact>(out DealDamageOnContact damage))
         {
-            damage.SetDamage(_knifeDamage);
+            damage.SetDamage(_knifeDamage + damageUp);
             damage.SetOwner(OwnerClientId);
         }
         
+    }
+
+    public void GetItem(int damageUp, float scaleUp)
+    {
+        _damageUp += damageUp;
+        _scaleUp += scaleUp;
+        _throwCooltime += 0.25f;
     }
 }

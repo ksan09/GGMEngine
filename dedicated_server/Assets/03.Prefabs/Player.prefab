@@ -218,6 +218,87 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _barTrm: {fileID: 974972617482224573}
+--- !u!1 &1795468983358241607
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6582186673574925320}
+  - component: {fileID: 8932814455408982827}
+  - component: {fileID: 610956572942285684}
+  m_Layer: 6
+  m_Name: ItemCollector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6582186673574925320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795468983358241607}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8860025281116083502}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8932814455408982827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795468983358241607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4f75ab3381364b459e3a9bef81b5c81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _knife: {fileID: 4242504510811069560}
+--- !u!58 &610956572942285684
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795468983358241607}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.4}
+  serializedVersion: 2
+  m_Radius: 0.6
 --- !u!1 &2880133717850535781
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,6 +407,7 @@ Transform:
   - {fileID: 2616969168016310233}
   - {fileID: 5777398081100374431}
   - {fileID: 9001250210546017741}
+  - {fileID: 6582186673574925320}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7882741116081084144
@@ -505,9 +587,10 @@ MonoBehaviour:
   _serverKnifePrefab: {fileID: 6659805034512558149, guid: 9b7cd56e9eec65e4aab52226866dd78b, type: 3}
   _clientKnifePrefab: {fileID: 8439194705890426115, guid: 3cfbec016a1e91b4885ca13539de8943, type: 3}
   _playerCollider: {fileID: 9202905716799552548}
+  _itemCollectCollider: {fileID: 610956572942285684}
   _knifeSpeed: 25
-  _knifeDamage: 5
-  _throwCooltime: 0.5
+  _knifeDamage: 2
+  _throwCooltime: 0.25
 --- !u!114 &8360904798973570809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -534,7 +617,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 235928e3f2e88734cbba11d1c146a285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 15
+  maxHealth: 30
   currentHealth:
     m_InternalValue: 0
   OnHealthChanged:

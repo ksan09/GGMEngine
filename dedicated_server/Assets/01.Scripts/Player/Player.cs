@@ -56,7 +56,7 @@ public class Player : NetworkBehaviour
     }
 
     
-    private void HandleJoin(ulong clientID, UserData userData)
+    public void HandleJoin(ulong clientID, UserData userData)
     {
         NextSpriteClientRpc();
     }

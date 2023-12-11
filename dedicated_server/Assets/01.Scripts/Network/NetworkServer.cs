@@ -85,7 +85,7 @@ public class NetworkServer : IDisposable
         if (player.TryGetComponent<Player>(out Player playerTemp))
         {
             playerTemp.SetUserName(userData.username);
-            
+            playerTemp.HandleJoin(clientID, userData);
         }
         else
         {

@@ -1614,7 +1614,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 1_71
+      name: Banana
       rect:
         serializedVersion: 2
         x: 194
@@ -1714,9 +1714,9 @@ TextureImporter:
       1_69: -172799187
       1_7: 1041276978
       1_70: -1626572742
-      1_71: 902885576
       1_8: 602158485
       1_9: -1665179560
+      Banana: 902885576
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

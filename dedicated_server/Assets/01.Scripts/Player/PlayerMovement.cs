@@ -14,6 +14,7 @@ public class PlayerMovement : NetworkBehaviour
 
     private Vector2 _movementInput;
     private Rigidbody2D _rigidbody2D;
+    private bool _canDoubleJump;
 
     [SerializeField] private Transform _groundCheckRayPos;
     [SerializeField] private Vector2 _rayDist;
@@ -30,13 +31,34 @@ public class PlayerMovement : NetworkBehaviour
 
         _inputReader.MovementEvent += HandleMovement;
         _inputReader.JumpEvent += HandleJump;
+        _inputReader.JumpEvent += HandleDoubleJump;
     }
 
     private void HandleJump()
     {
         if (!IsOwner) return;
         if (GroundCheck() == false) return;
+
+        
+        _rigidbody2D.velocity = Vector2.zero;
         _rigidbody2D.AddForce(Vector2.up * _jumpPower, ForceMode2D.Impulse);
+        StartCoroutine(DelayCanDoubleJumpCo(0.1f));
+    }
+
+    IEnumerator DelayCanDoubleJumpCo(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        _canDoubleJump = true;
+    }
+
+    private void HandleDoubleJump()
+    {
+        if (!IsOwner) return;
+        if (!_canDoubleJump) return;
+
+        _canDoubleJump = false;
+        _rigidbody2D.velocity = Vector2.zero;
+        _rigidbody2D.AddForce(Vector2.up * _jumpPower * 0.8f, ForceMode2D.Impulse);
     }
 
     private void HandleMovement(Vector2 movement)
@@ -44,6 +66,7 @@ public class PlayerMovement : NetworkBehaviour
         if (!IsOwner) return;
         _movementInput = movement;
     }
+
 
     private void FixedUpdate()
     {
@@ -64,11 +87,17 @@ public class PlayerMovement : NetworkBehaviour
 
         _inputReader.MovementEvent -= HandleMovement;
         _inputReader.JumpEvent -= HandleJump;
+        _inputReader.JumpEvent -= HandleDoubleJump;
     }
 
     private bool GroundCheck()
     {
-        return Physics2D.Raycast(_groundCheckRayPos.position, _rayDist.normalized, Mathf.Abs(_rayDist.y), _groundLayer).collider;
+        if(Physics2D.Raycast(_groundCheckRayPos.position, _rayDist.normalized, Mathf.Abs(_rayDist.y), _groundLayer).collider)
+        {
+            _canDoubleJump = false;
+            return true;
+        }
+        return false;
     }
 
 #if UNITY_EDITOR
