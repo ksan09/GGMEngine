@@ -267,7 +267,7 @@ MonoBehaviour:
   _playerPrefab: {fileID: 7882741116081084144, guid: 733b97f1b0ab59c4caf8d7bfb1dfe0f9, type: 3}
   _serverPrefab: {fileID: 625520993881018241, guid: 6ca8c1dc103abdb478fc17b085690e5b, type: 3}
   _clientPrefab: {fileID: 7560306035563123084, guid: cbefd66ae7a2eca40922124127fee346, type: 3}
-  _ipAddress: 127.0.0.1
+  _ipAddress: 172.31.3.53
   _port: 7777
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

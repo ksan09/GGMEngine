@@ -62,11 +62,18 @@ public class Player : Entity
     protected void OnEnable()
     {
         PlayerInput.DashEvent += HandleDashEvent;
+        PlayerInput.CrystalEvent += HandleCrystalEvent;
     }
 
     protected void OnDisable()
     {
         PlayerInput.DashEvent -= HandleDashEvent;
+        PlayerInput.CrystalEvent -= HandleCrystalEvent;
+    }
+
+    private void HandleCrystalEvent()
+    {
+        Skill.GetSkill<CrystalSkill>().AtemptUseSkill();
     }
 
     private void HandleDashEvent()

@@ -8,7 +8,7 @@ public enum PlayerSkill
     //None = 0,
     Dash = 1,
     Clone = 2,
-    //Crystal = 3,
+    Crystal = 3,
 }
 
 public class SkillManager : MonoSingleton<SkillManager>
@@ -42,6 +42,7 @@ public class SkillManager : MonoSingleton<SkillManager>
 
     public Skill GetSkill(PlayerSkill skillEnumType)
     {
+        //Type.GetType($"{skillEnumType.ToString()}Skill");
         Type skillType = _skillTypeDictionary[skillEnumType];
         if(_skills.TryGetValue(skillType, out Skill skill))
         {

@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="loadingPanel" style="flex-grow: 1; justify-content: center; align-items: center; background-color: rgb(0, 0, 0);">
+        <ui:VisualElement name="container" style="align-items: center;">
+            <ui:Label tabindex="-1" text="게임에 필요한 데이터 로딩중" parse-escape-sequences="true" display-tooltip-when-elided="true" name="loading-text" style="color: rgb(255, 255, 255);" />
+            <ui:Label tabindex="-1" text="로딩 카테고리가 여기에 옵니다" parse-escape-sequences="true" display-tooltip-when-elided="true" name="info-text" style="font-size: 32px; color: rgb(255, 255, 255);" />
+            <ui:Label tabindex="-1" text="세부 카티고리는 여기에 옵니다" parse-escape-sequences="true" display-tooltip-when-elided="true" name="info-text2" style="font-size: 16px; color: rgb(255, 255, 255); align-items: flex-start;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="load-complete" style="position: absolute; right: 50px; bottom: 50px;">
+            <ui:Label tabindex="-1" text="로딩 완료 - 아무 키나 누르세요" parse-escape-sequences="true" display-tooltip-when-elided="true" name="complete-text" style="-unity-text-align: upper-right; font-size: 16px; color: rgb(255, 255, 255);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
