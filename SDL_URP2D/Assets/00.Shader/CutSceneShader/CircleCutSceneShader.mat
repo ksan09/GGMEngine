@@ -43,7 +43,7 @@ Material:
     m_Floats: []
     m_Colors:
     - _BackgroundColor: {r: 0, g: 0, b: 0, a: 1}
-    - _CirclePos: {r: 293.76, g: 201.96002, b: 10, a: 0}
+    - _CirclePos: {r: 692.2799, g: 343.44, b: 10, a: 0}
     - _CircleSize: {r: 0, g: 0, b: 0, a: 0}
     - _Resolution: {r: 1920, g: 1080, b: 0, a: 0}
   m_BuildTextureStacks: []
